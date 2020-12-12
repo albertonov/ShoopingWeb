@@ -1,0 +1,98 @@
+<script>
+  function removeOneItem_clicked (event,id) {
+    event.preventDefault();
+    Model.removeOneCartItem(id);
+    render('/templates/cart.hbs', '#contents', Model);
+  };
+  function removeAllItems_clicked (event,id) {
+    event.preventDefault();
+    Model.removeAllItems(id);
+    render('/templates/cart.hbs', '#contents', Model);
+  };
+</script>
+
+
+{{> navBar this}}
+{{> header}}
+
+       <div class="container">
+            <div class="row justify-content-center" >
+                    <div class="col-md-10">
+                        <h1 class="text-center text-md-center">Shopping Cart</h1>
+                    </div>   
+                
+            </div>
+        {{#if (hasNotCartItems user)}}
+        <h2 class="text-center text-md-center">No product items in the shopping cart yet</h2>
+        {{else}} 
+            <div class="row justify-content-center" >
+                <div class=" col-md-10">
+                    <h2 class="text-center text-md-left">Products</h2>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="table-responsive col-md-10">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">SubTotal</th>
+                                <th scope="col"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {{#each user.shoppingCart.items}}
+                            <tr>  
+                                <td>{{this.qtyItem}}</td>
+                                <td>{{this.title}}</td>
+                                <td>{{formatPrice this.price}}</td>
+                                <td>{{formatPrice (multiplicate this.qtyItem this.price)}}</td>
+                                <td class="align-middle d-flex justify-content-end " style="margin-right: 7%;">
+                                  <div class="dropdown align-middle">
+                                      
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Remove</button>
+                                    <div class="dropdown-menu " aria-labelledby="Remove">
+                                        <a class="dropdown-item" onclick="removeOneItem_clicked(event,'{{this._id}}')" href="/cart" >One</a>
+                                        <a class="dropdown-item" onclick="removeAllItems_clicked(event,'{{this._id}}')" href="/cart">All</a> 
+                                </div>
+                                </td>
+                                
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row justify-content-center" >
+                <div class="text-center text-md-center col-lg-4.justify-content-center col-md-4 col-5.justify-content-center">
+                    <h5 ><b>Total: </b>{{formatPrice this.user.shoppingCart.total}}</h5>
+                </div>
+            </div>
+            
+                <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        <div class="col-md-9">
+                            <label for="Addres"><b>Adress:</b> {{this.user.address}}</label>
+                        </div>
+                        <div class="col-md-9">
+                            <label for="CardNumber"><b>Card Number:</b> Number</label>
+                        </div>
+                        <div class="col-md-9">
+                            <label for="CardHolderr"><b>Card Holder:</b> Owner </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center " >
+                    <div class="col-lg-4 col-md-3 col-4 text-center">
+                        <button type="button" onclick="navigateTo('/purchase')" class="btn btn-primary">Purchase</button>
+                    </div>
+                </div>
+        {{/if}}
+        </div>
+
+        <br><br><br><br>        
+{{> footer}}

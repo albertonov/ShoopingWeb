@@ -101,7 +101,7 @@ Model.products = [
 
 
 
-
+Model.order=[{}];
 
 Model.users = [{
   _id: 100, email: 'alberto@gmail.com',
@@ -152,7 +152,7 @@ Model.addToCart = function(id){
   for (k = 0; k< Model.products.length; k++) {
     if (Model.products[k]._id == id){
         productoToAdd = Model.products[k];
-        console.log("Encontrado: "+ Model.products[k].title)
+        console.log("Added: "+ Model.products[k].title)
         //comprobar si el elemento ya esta añadido a la lista
         for (i=0; i<Model.user.shoppingCart.items.length; i++){
           if (Model.user.shoppingCart.items[i]._id == productoToAdd._id){
@@ -208,7 +208,7 @@ Model.removeAllItems = function (id) {
   }
   for (i=0; i<Model.user.shoppingCart.items.length; i++){
     if (Model.user.shoppingCart.items[i]._id == id){
-      console.log("HOLA")
+      
       var numberOfElements = Model.user.shoppingCart.items[i].qtyItem;
 
       Model.user.shoppingCart.qty -= numberOfElements;
@@ -221,3 +221,40 @@ Model.removeAllItems = function (id) {
     }
   }
 }
+
+Model.purchase = function (date, address, cardNumber, cardOwner) {
+  number= new Date().getTime();
+  Model.order.number= number;
+  Model.order.date= date;
+  Model.order.address= address;
+  Model.order.cardNumber= cardNumber;
+  Model.order.cardOwner= cardOwner;
+  Model.order.subtotal= Model.user.shoppingCart.subtotal;
+  Model.order.tax= Model.user.shoppingCart.tax;
+  Model.order.total= Model.user.shoppingCart.total;
+  Model.order.items= Model.user.shoppingCart.items;
+  Model.user.orders.push(vOrder = Object.assign({}, Model.order));
+
+  Model.resetCart();
+
+}
+
+Model.resetCart = function () {
+
+  Model.user.shoppingCart.items =[];
+  Model.user.shoppingCart.qty = 0;
+  Model.user.shoppingCart.subtotal = 0;
+  Model.user.shoppingCart.tax = 0;
+  Model.user.shoppingCart.total = 0;
+
+}
+
+Model.getOrder=function(matching){
+  order = [];
+  for(var i = 0; i < Model.user.orders.length; i++){
+      if(matching == Model.user.orders[i].number){
+        order=Model.user.orders[i];
+      }
+  }
+  return order;
+  };

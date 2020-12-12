@@ -75,13 +75,13 @@
                 <div class="row justify-content-center">
                     <div class="col-md-9">
                         <div class="col-md-9">
-                            <label for="Addres"><b>Adress:</b> {{this.user.address}}</label>
+                            <label for="Subtotal"><b>SubTotal:</b> {{formatPrice this.user.shoppingCart.subtotal}}</label>
                         </div>
                         <div class="col-md-9">
-                            <label for="CardNumber"><b>Card Number:</b> Number</label>
+                            <label for="Taxes"><b>Taxes:</b> {{formatPrice this.user.shoppingCart.tax}}</label>
                         </div>
                         <div class="col-md-9">
-                            <label for="CardHolderr"><b>Card Holder:</b> Owner </label>
+                            <label for="Total"><b>Total:</b> {{formatPrice this.user.shoppingCart.total}}</label>
                         </div>
                     </div>
                 </div>

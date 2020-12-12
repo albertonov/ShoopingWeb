@@ -1,7 +1,23 @@
+<script>
+  function checkout_clicked(event) {
+    event.preventDefault();
+    var form = document.getElementById('purchase-form');
+    form.classList.add('was-validated');
+    if (form.checkValidity()) {
+      Model.purchase($('#date').val(), $('#address').val(), $('#cardNumber').val(), $('#cardOwner').val());
+      navigateTo("/order/id/"+Model.order.number);
+    } else {
+      console.log('invalid');
+    }
+  }
+</script>
 {{> navBar this}}
 {{> header}}      
 <main>   
       <div class="container">
+        {{#if (hasNotCartItems user)}}
+        <h2 class="text-center text-md-center">No product items in the shopping cart yet</h2>
+        {{else}} 
         <div class="row justify-content-center" >
           <div class="col-md-10">
               <h1 class="text-center text-md-left">Purchase</h1>
@@ -10,22 +26,32 @@
         
         <br>
         <div >
-          <form class="justify-content-center col-md-10" style="margin: 0 auto;">
-              <div class="form-group">
-                  <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="dd/mm/aaaa">   
-              </div>
-              <div class="form-group ">
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Address">
-              </div>
-              <div class="form-group">
-                  <input type="number" class="form-control" id="formGroupExampleInput2" placeholder="Card Number">   
-              </div>
-              <div class="form-group ">
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Card Owner">
-              </div>
-              <div class="row" >
-                <h1>Items</h1>
-              </div>
+          <form id="purchase-form" class="justify-content-center col-md-10" style="margin: 0 auto;">
+            <div class="form-group">
+                <label for="date" class="sr-only">Date</label>
+                <input type="date" id="date" class="form-control" placeholder="Date" required="" autofocus="">
+                <div class="invalid-feedback">The date field cannot be empty</div>
+            </div>
+            <div class="form-group">
+                <label for="cardNumber" class="sr-only">Address</label>
+                <input type="text" id="address" class="form-control" placeholder="address" required="">
+                <div class="invalid-feedback">The address field cannot be empty</div>
+            </div>
+            <div class="form-group">
+                <label for="cardNumber" class="sr-only">Card Number</label>
+                <input type="number" id="cardNumber" class="form-control" placeholder="CardNumber" required="">
+                <div class="invalid-feedback">The card number field cannot be empty</div>
+            </div>
+            <div class="form-group">
+                <label for="cardOwner" class="sr-only">Card Owner</label>
+                <input type="text" id="cardOwner" class="form-control" placeholder="cardOwner" required="">
+                <div class="invalid-feedback">The card owner field cannot be empty</div>
+            </div>
+            <div class="row justify-content-center" >
+              <div class="col-md-11">
+                  <h2 class="text-center">Items</h2>
+              </div>   
+            </div>
               <div class="row justify-content-center">
                 <div class="table-responsive col-md-9">
                     <table class="table">
@@ -33,31 +59,44 @@
                             <tr>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Product</th>
-                                <th scope="col">Total</th>
+                                <th scope="col">SubTotal</th>
                             </tr>
                         </thead>
                         <tbody>
+                          {{#each user.shoppingCart.items}}
                             <tr>    
-                                <td>1</td>
-                                <td>Microsoft Surface Pro 3</td>
-                                <td>999.99€</td>
+                                <td>{{this.qtyItem}}</td>
+                                <td>{{this.title}}</td>
+                                <td>{{formatPrice (multiplicate this.qtyItem this.price)}}</td>
                             </tr>
-                            <tr>    
-                                <td>3</td>
-                                <td>Asus 550VX</td>
-                                <td>1500€</td>
-                            </tr>
+                          {{/each}}
                         </tbody>
                     </table>
                 </div>
               </div>
-            </form>    
-            <div class="row justify-content-end "  style="margin-right: 0%;">
-                <button type="button"   onclick="navigateTo('/')" class="btn btn-primary">Check Out</button>
+              <div class="row justify-content-center">
+                    <div class="col-md-9">
+                        <div class="col-md-9">
+                            <label for="SubTotal"><b>SubTotal:</b> {{formatPrice this.user.shoppingCart.subtotal}}</label>
+                        </div>
+                        <div class="col-md-9">
+                            <label for="Taxes"><b>Taxes:</b> {{formatPrice this.user.shoppingCart.tax}}</label>
+                        </div>
+                        <div class="col-md-9">
+                            <label for="Total"><b>Total:</b> {{formatPrice this.user.shoppingCart.total}}</label>
+                        </div>
+                    </div>
+                </div>
+            </form>   
+
+            <div class="row justify-content-center"  style="margin-right: 0%;">
+                <button type="button"   href="/index" onclick="checkout_clicked(event)" class="btn btn-primary">Check Out</button>
             </div>
+            
 
           
         </div>
+      {{/if}}
       </div>
       <br><br><br><br>
     </main>

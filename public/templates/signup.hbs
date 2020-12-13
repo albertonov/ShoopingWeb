@@ -4,8 +4,16 @@
     var form = document.getElementById('signup-form');
     form.classList.add('was-validated');
     if (form.checkValidity()) {
-      Model.signup($('#email').val(), $('#password').val(), $('#name').val(), $('#surname').val(), $('#date').val(), $('#address').val());
-      navigateTo(event.target.href);
+      if( $('#password').val() == $('#passwordconfirm').val() ){
+        var result = Model.signup($('#name').val(), $('#surname').val(), $('#address').val(), $('#birth').val(), $('#email').val(), $('#password').val());
+        //
+        if (result != null) {navigateTo('/signin')}
+      }
+      else{
+        console.log("NOT EQUALS")
+        $(".alert").show()
+      }
+
     } else {
       console.log('invalid');
     }
@@ -14,6 +22,7 @@
 
 {{> navBar this}}
 {{> header}}  
+
       <div class="container">
         <div class="row justify-content-center" >
             <h1>Sign Up</h1>
@@ -21,20 +30,29 @@
         <br>
         <div >
           <form id="signup-form">
+            <div class="alert alert-danger collapse" role="alert">
+              Password doesn't match!
+            </div>
             <div class="form-group ">
-              <input type="text" class="form-control" id="name" placeholder="Name">
+                    <label for="name" class="sr-only">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Name" required="" autofocus="">
+                    <div class="invalid-feedback">The Name field cannot be empty</div>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="surname" placeholder="Surname">   
+                    <label for="surname" class="sr-only">Name</label>
+                    <input type="text" id="surname" class="form-control" placeholder="Surname" required="" autofocus="">
+                    <div class="invalid-feedback">The Surname field cannot be empty</div>
             </div>
             <div class="form-group ">
-                <input type="text" class="form-control" id="address" placeholder="Address">
+                    <label for="address" class="sr-only">Name</label>
+                    <input type="text" id="address" class="form-control" placeholder="Address" required="" autofocus="">
+                    <div class="invalid-feedback">The Address field cannot be empty</div>
               </div>
 
                 <div class="form-group">
                     <label for="date" class="sr-only">Date</label>
-                    <input type="date" id="date" class="form-control" placeholder="Date" required="" autofocus="">
-                    <div class="invalid-feedback">The email field cannot be empty</div>
+                    <input type="date" id="birth" class="form-control" placeholder="Date" required="" autofocus="">
+                    <div class="invalid-feedback">The Date field cannot be empty</div>
                 </div>
             <div class="form-group">
                 <label for="email" class="sr-only">Email address</label>
@@ -47,9 +65,9 @@
                 <div class="invalid-feedback">The password field cannot be empty</div>
             </div>
             <div class="form-group">
-                <label for="password" class="sr-only">Confirm Password Password</label>
+                <label for="passwordconfirm" class="sr-only">Confirm Password Password</label>
                 <input type="password" id="passwordconfirm" class="form-control" placeholder="Password" required="">
-                <div class="invalid-feedback">The password field cannot be empty</div>
+                <div class="invalid-feedback">The password confirm field cannot be empty</div>
             </div>
             
             <div class="row justify-content-end "  style="margin-right: 0%;">

@@ -88,7 +88,7 @@
       else if (matching = path.match(/^\/signup$/))
         render('/templates/signup.hbs', '#contents', Model);
       else {
-        render('/templates/not-found.hbs', '#contents', Model);
+        render('/templates/notFound.hbs', '#contents', Model);
       }
     }
     
@@ -149,6 +149,13 @@
     <script>
         Handlebars.registerHelper("multiplicate", function(thing1, thing2) {
           return thing1 * thing2;
+        });
+    </script>
+    <script>
+        Handlebars.registerHelper('formatDate', function(dateString) {
+                
+         
+            return  dateString.format("MDY");
         });
     </script>
     <script>

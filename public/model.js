@@ -113,10 +113,9 @@ Model.users = [{
   shoppingCart: { items: [], qty:0, total:0, subtotal:0, tax:0 },
   orders: []
 }];
-
+idCounter = 101;
 
 Model.user = null;
-Model.user = Model.users[0];
 Model.signin = function (email, password) {
   Model.user = null;
   for (var i = 0; i < Model.users.length; i++) {
@@ -125,22 +124,28 @@ Model.signin = function (email, password) {
   }
 };
 
-Model.signup = function (emailadd, passwordadd, name, surname, birth, address) {
- 
+Model.signup = function (name, surname, address, birth, email, password) {
+  Model.user = null;
+  for (x in Model.users) {
+    if (Model.users[x].email == email) return null;
+  }
+
   newUser = (
     {
-      _id: 101, email: emailadd,
-      password: passwordadd,
-      name: 'Alberto',
-      surname: 'Novillo',
-      birth: '1998-09-12',
-      address: 'ESII, UCLM',
+      _id: idCounter, 
+      email: email,
+      password: password,
+      name: name,
+      surname: surname,
+      birth: birth,
+      address: address,
       shoppingCart: { items: [], qty:0, total:0, subtotal:0, tax:0 },
       orders: []
     }
   )
-
+  idCounter +=1;
   Model.users.push(newUser);
+  return newUser;
 };
 
 Model.signout = function () {

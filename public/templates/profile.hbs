@@ -21,10 +21,10 @@
                         <label for="Surname"><b>Surname:</b> {{user.surname}}</label>
                     </div>
                     <div class="col-md-9">
-                        <label for="Birth"><b>Birth:</b> {{user.birth}} </label>
+                        <label for="Birth"><b>Birth:</b> {{ user.birth}} </label>
                     </div>
                     <div class="col-md-9">
-                        <label for="Address"><b>Address:</b>{{user.address}} </label>
+                        <label for="Address"><b>Address:</b> {{user.address}} </label>
                     </div>
                     <div class="col-md-9">
                         <label for="Email"><b>Email:</b> {{user.email}} </label>
@@ -33,50 +33,51 @@
             </div>
             
 
-            {{#if (hasOrders user)}}
+            {{#if (hasNotOrders user)}}
             <h4 class="card-name row justify-content-center">No orders founded</h4> <br><br>
             {{else}} 
+
+            <div class="row justify-content-center">
+            <div class="col-md-9">
                 <div class="col-md-9">
-                    <div class="col-md-9">
-                        <h1>Order List</h1>
-                    </div>   
-                </div>
+                        <h2>Order List</h2>
+                </div>   
             </div>
+            <br>
              
 
 
-            <div class="row justify-content-center">
+            
                 <div class="table-responsive col-md-9">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Date</th>
                                 <th scope="col">Number</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Total</th>
-                                <th scope="col"> </th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>    
-                                <td class="align-middle">18/10/2020</td>
-                                <td class="align-middle">34534</td>
-                                <td class="align-middle">999.99€</td>
-                                <td class="align-middle d-flex justify-content-end " style="margin-right: 7%;">
-                                    <div class=" col-lg-4 col-md-3.justify-content-md-between col-4.justify-content-sm-start">
-                                        <button type="button" onclick="navigateTo('/order')" class="btn btn-primary">Details
-                                        </button>
-                                    </div>
-                                </div>
-                                </td>
-                            </tr>
+                        {{#each user.orders}}
+                        <tr>    
+                            <td >{{this.number}}</td>
+                            <td>{{this.date}}</td>
+                            <td>{{this.total}}</td>
+                            <td class=" d-flex justify-content-end"> 
+                                <button type="button" onclick="navigateTo('/order/id/{{this.number}}')" class="btn btn-primary">Details</button>
+                            </td>
+                        </tr>
+                        {{/each}}
                         </tbody>
                     </table>
-            </div>
+                </div>
+            
             {{/if}}
         </div>
         
             
-
+        <br><br><br><br><br><br>
 
 
         

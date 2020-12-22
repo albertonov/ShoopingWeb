@@ -1,10 +1,14 @@
 <script>
-  function buy_clicked(event, id) {
-
-    event.preventDefault();
-    Model.addToCart(id)
-    render('/templates/index.hbs', '#contents', Model);
-  }
+function buy_clicked(event, _id) {
+  event.preventDefault();
+  Model.buy(_id)
+    .done(function () {
+      navigateTo(event.target.href)
+    })
+    .fail(function(){
+          console.error('buy error');
+    })
+}
 </script>
 
 {{> navBar this}}

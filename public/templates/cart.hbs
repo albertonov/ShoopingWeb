@@ -1,9 +1,10 @@
 <script>
   function removeOneItem_clicked (event,id) {
+    console.log(id)
     event.preventDefault();
-    Model.removeOneCartItem(id);
-    render('/templates/cart.hbs', '#contents', Model);
-  };
+    Model.removeOne(id);
+   };
+
   function removeAllItems_clicked (event,id) {
     event.preventDefault();
     Model.removeAllItems(id);

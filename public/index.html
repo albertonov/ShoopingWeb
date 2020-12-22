@@ -67,29 +67,52 @@
       var path = location.pathname;
       var matching = null;  
       console.log('Routing ', path);  
-      if (matching = path.match(/^\/index$/))
-        render('/templates/index.hbs', '#contents', Model);
-      else if (matching = path.match(/^\/$/))
-        render('/templates/index.hbs', '#contents', Model);
-      else if (matching = path.match(/^\/cart$/))
-        render('/templates/cart.hbs', '#contents', Model);
-      else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
-        var order = Model.getOrder(matching[1]);
-        console.log('Order',order);
-        if (order) render('/templates/order.hbs', '#contents', { user: Model.user, order });
-        else render('/templates/not-found.hbs', '#contents', Model);
+
+      var context = {}
+      var p = Model.getUserCartQty()
+      .done(function (userCartQty) { context.user = userCartQty; })
+      .fail(function (error) { console.error(error); })
+
+      if (matching = path.match(/^\/index$/)) {
+          return Model.getProducts()
+            .done(function (result) { context.products = result; })
+            .fail(function (error) { console.error(error); })
+            .always(function () {
+              return p.always(function () { return render('/templates/index.hbs', '#contents', context); })});  }
+      else if (matching = path.match(/^\/$/)) {
+          return Model.getProducts()
+            .done(function (result) { context.products = result; })
+            .fail(function (error) { console.error(error); })
+            .always(function () {
+              return p.always(function () { return render('/templates/index.hbs', '#contents', context); })});  }
+      else if (matching = path.match(/^\/cart$/)){
+        return Model.getCart()
+            .done(function (result) { context.user.shoppingCart = result; })
+            .fail(function (error) { console.error(error); })
+            .always(function () {
+            return p.always(function () {
+            render('/templates/cart.hbs', '#contents', context); })
+            });
       }
-      else if (matching = path.match(/^\/profile$/))
-        render('/templates/profile.hbs', '#contents', Model);
-      else if (matching = path.match(/^\/purchase$/))
-        render('/templates/purchase.hbs', '#contents', Model);
-      else if (matching = path.match(/^\/signin$/))
-        render('/templates/signin.hbs', '#contents', Model);
-      else if (matching = path.match(/^\/signup$/))
-        render('/templates/signup.hbs', '#contents', Model);
-      else {
-        render('/templates/notFound.hbs', '#contents', Model);
-      }
+
+
+    
+          else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
+            var order = Model.getOrder(matching[1])
+            context.order=order;
+            if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
+            else return p.always(function () { render('/templates/not-found.hbs', '#contents', context); });}  
+          else if (matching = path.match(/^\/profile$/))
+            return p.always(function () { render('/templates/profile.hbs', '#contents', context); })
+          else if (matching = path.match(/^\/purchase$/))
+            return p.always(function () { render('/templates/purchase.hbs', '#contents', context); })
+          else if (matching = path.match(/^\/signin$/))
+            return p.always(function () { render('/templates/signin.hbs', '#contents', context); })
+          else if (matching = path.match(/^\/signup$/))
+            return p.always(function () { render('/templates/signup.hbs', '#contents', context); })
+          else {
+            return p.always(function () { render('/templates/not-found.hbs', '#contents', context); })
+        }
     }
     
     
@@ -153,8 +176,6 @@
     </script>
     <script>
         Handlebars.registerHelper('formatDate', function(dateString) {
-                
-         
             return  dateString.format("MDY");
         });
     </script>
@@ -171,7 +192,7 @@
     </script>
 
 <script>
-  function signOut(url) {
+  function signout(url) {
      event.preventDefault();
      Model.signout();
      navigateTo(event.target.href); 

@@ -1,15 +1,26 @@
 <script>
-  function signin_clicked(event) {
-    event.preventDefault();
-    var form = document.getElementById('signin-form');
-    form.classList.add('was-validated');
-    if (form.checkValidity()) {
-      Model.signin($('#email').val(), $('#password').val());
-      navigateTo(event.target.href);
-    } else {
-      console.log('invalid');
-    }
+function signin_clicked(event) {
+  
+  event.preventDefault();
+  var form = document.getElementById('signin-form');
+  form.classList.add('was-validated');
+  if (form.checkValidity()) {
+    
+    Model.signin($('#email').val(), $('#password').val())
+      .done(function (user) {
+        Model.user = user;
+        navigateTo(event.target.href);
+      })
+      .fail(function (error) {
+        console.error('signin error',
+          error.status,
+          error.statusText,
+          error.responseJSON.message);
+      })
+  } else {
+    console.log('invalid');
   }
+}
 </script>
 
 {{> navBar this}}

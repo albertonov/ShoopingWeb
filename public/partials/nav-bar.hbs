@@ -23,7 +23,7 @@
           <a class="dropdown-item {{#if user}}disabled{{/if}}" href="/signup" onclick="navigateTo(event.target.href)">Sign Up</a>
           <a class="dropdown-item {{#if user}}disabled{{/if}}" href="/signin" onclick="navigateTo(event.target.href)">Sign In</a>
           <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/profile" onclick="navigateTo(event.target.href)">Profile</a>
-          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/index" onclick="signOut(event.target.href)">Sign Out</a>
+          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/index" onclick="signout(event.target.href)">Sign Out</a>
               </div>
             </li>
     </ul>

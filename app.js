@@ -94,7 +94,7 @@ function (req, res, next) {
   console.log("removing")
   var pid = req.params.id;
   var uid = req.cookies.userid;
-  var cart = Model.removeOne(uid, pid);
+  var cart = model.removeOne(uid, pid);
   if (cart) { return res.json(cart); }
   else return res.status(401).send(
     { message: 'User or Product not found' });

@@ -9,13 +9,12 @@ function signin_clicked(event) {
     Model.signin($('#email').val(), $('#password').val())
       .done(function (user) {
         Model.user = user;
+        Messages.success.push(`Welcome ${user.name } ${user.surname}`)
         navigateTo(event.target.href);
       })
       .fail(function (error) {
-        console.error('signin error',
-          error.status,
-          error.statusText,
-          error.responseJSON.message);
+        Messages.danger.push(`${error.responseJSON.message}`);
+        navigateTo('/signin');
       })
   } else {
     console.log('invalid');
@@ -25,6 +24,7 @@ function signin_clicked(event) {
 
 {{> navBar this}}
 {{> header}}  
+{{> messages this}}
 <div class="container">
     <div class="row justify-content-center" >
         <h1>Sign In</h1>

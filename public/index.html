@@ -14,7 +14,9 @@
   <title>EasyPCy</title>
   
   <link rel="icon" type="image/png" href="./images/ico16.png" sizes="16x16">
-  <script src ="./model.js"></script>
+  <script src ="./model.js">    </script>
+  <script src ="/messages.js">  </script>
+
 </head>
 
 
@@ -69,6 +71,8 @@
       console.log('Routing ', path);  
 
       var context = {}
+      context.messages = { success: Messages.success, danger: Messages.danger };
+      Messages.clear();
       var p = Model.getUserCartQty()
       .done(function (userCartQty) { context.user = userCartQty; })
       .fail(function (error) { console.error(error); })
@@ -134,7 +138,8 @@
     $(function () {
       $.when(loadPartial('navBar', '/partials/nav-bar.hbs'),
         loadPartial('footer', '/partials/footer.hbs'),
-        loadPartial('header', '/partials/header.hbs'))
+        loadPartial('header', '/partials/header.hbs')),
+        loadPartial('messages', '/partials/messages.hbs')
         .done(function () {
           route()
         })

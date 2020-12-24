@@ -1,8 +1,9 @@
 <script>
   function removeOneItem_clicked (event,id) {
-    console.log(id)
+    
     event.preventDefault();
     Model.removeOne(id);
+    
    };
 
   function removeAllItems_clicked (event,id) {
@@ -15,6 +16,7 @@
 
 {{> navBar this}}
 {{> header}}
+{{> messages this}}
 
        <div class="container">
             <div class="row justify-content-center" >
@@ -47,16 +49,16 @@
                         <tbody>
                           {{#each user.shoppingCart.items}}
                             <tr>  
-                                <td>{{this.qtyItem}}</td>
+                                <td>{{this.qty}}</td>
                                 <td>{{this.title}}</td>
                                 <td>{{formatPrice this.price}}</td>
-                                <td>{{formatPrice (multiplicate this.qtyItem this.price)}}</td>
+                                <td>{{formatPrice (multiplicate this.qty this.price)}}</td>
                                 <td class="align-middle d-flex justify-content-end " style="margin-right: 7%;">
                                   <div class="dropdown align-middle">
                                       
                                     <button class="btn btn-secondary dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Remove</button>
                                     <div class="dropdown-menu " aria-labelledby="Remove">
-                                        <a class="dropdown-item" onclick="removeOneItem_clicked(event,'{{this._id}}')" href="/cart" >One</a>
+                                        <a class="dropdown-item" onclick="removeOneItem_clicked(event,'{{this.product}}')" href="/cart" >One</a>
                                         <a class="dropdown-item" onclick="removeAllItems_clicked(event,'{{this._id}}')" href="/cart">All</a> 
                                 </div>
                                 </td>

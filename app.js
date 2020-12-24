@@ -24,12 +24,10 @@ app.use(logger('dev'));
 //Set public folder to publish static content
 app.use(express.static(path.join(__dirname ,'public')));
 
-
 app.get('/api/products', function (req, res, next) {
   console.log("PRODUCTS")
   return res.json(model.products);
   });
-
 
 // Adds the / path to the application
 app.get('/', function (req, res) {
@@ -91,7 +89,7 @@ app.get('/api/cart/qty', function (req, res, next) {
 
 app.delete('/api/cart/items/product/:id/one', 
 function (req, res, next) {
-  console.log("removing")
+  
   var pid = req.params.id;
   var uid = req.cookies.userid;
   var cart = model.removeOne(uid, pid);
@@ -101,7 +99,16 @@ function (req, res, next) {
 });
 
 
-
+app.delete('/api/cart/items/product/:id/all', 
+function (req, res, next) {
+  
+  var pid = req.params.id;
+  var uid = req.cookies.userid;
+  var cart = model.removeAll(uid, pid);
+  if (cart) { return res.json(cart); }
+  else return res.status(401).send(
+    { message: 'User or Product not found' });
+});
 
 app.get(/\/.*/, function (req, res) {
     res.sendFile(path.join(__dirname ,'/public/index.html'));

@@ -1,17 +1,15 @@
 var Model = {}
 
-
   Model.getProducts = function () {
     return $.ajax({ url: '/api/products', method: 'GET' });
   }
 
   Model.signin = function (email, password) {
-  
-  return $.ajax({
-      url: '/api/users/signin',
-      method: 'POST',
-      data: { email, password }
-    });
+    return $.ajax({
+        url: '/api/users/signin',
+        method: 'POST',
+        data: { email, password }
+      });
   }
 
   Model.getUserId = function () {
@@ -20,7 +18,6 @@ var Model = {}
   }
 
   Model.signout = function () {
-    //Model.user = null;
     document.cookie = 'userid=;expires=0;path=/;'
   }
 
@@ -38,5 +35,9 @@ var Model = {}
 
   Model.removeOne = function (pid) {
     return $.ajax({ url: '/api/cart/items/product/' + pid + '/one', method: 'DELETE' })
-    }
-  
+  }
+
+  Model.removeAllItems = function(pid){
+    console.log("'/api/cart/items/product/" + pid + "/all")
+    return $.ajax({ url: '/api/cart/items/product/' + pid + '/all', method: 'DELETE' })
+  }

@@ -1,15 +1,12 @@
 <script>
   function removeOneItem_clicked (event,id) {
-    
     event.preventDefault();
     Model.removeOne(id);
-    
    };
 
   function removeAllItems_clicked (event,id) {
     event.preventDefault();
     Model.removeAllItems(id);
-    render('/templates/cart.hbs', '#contents', Model);
   };
 </script>
 
@@ -59,7 +56,7 @@
                                     <button class="btn btn-secondary dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Remove</button>
                                     <div class="dropdown-menu " aria-labelledby="Remove">
                                         <a class="dropdown-item" onclick="removeOneItem_clicked(event,'{{this.product}}')" href="/cart" >One</a>
-                                        <a class="dropdown-item" onclick="removeAllItems_clicked(event,'{{this._id}}')" href="/cart">All</a> 
+                                        <a class="dropdown-item" onclick="removeAllItems_clicked(event,'{{this.product}}')" href="/cart">All</a> 
                                 </div>
                                 </td>
                                 

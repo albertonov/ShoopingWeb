@@ -207,27 +207,8 @@ Model.removeOneCartItem = function (id) {
     }
   }
 };
-Model.removeAllItems = function (id) {
-  for (k=0; k<Model.products.length; k++) {
-    if(Model.products[k]._id == id){
-      var productReference = Model.products[k];
-    }
-  }
-  for (i=0; i<Model.user.shoppingCart.items.length; i++){
-    if (Model.user.shoppingCart.items[i]._id == id){
-      
-      var numberOfElements = Model.user.shoppingCart.items[i].qtyItem;
 
-      Model.user.shoppingCart.qty -= numberOfElements;
-      Model.user.shoppingCart.subtotal -= productReference.price * numberOfElements;
-      Model.user.shoppingCart.tax = Model.user.shoppingCart.subtotal * 0.21;
-      Model.user.shoppingCart.total = Model.user.shoppingCart.subtotal + Model.user.shoppingCart.tax;
-      Model.user.shoppingCart.items[i].qtyItem = 0;
-      Model.user.shoppingCart.items.splice(i, 1);
-      return true;
-    }
-  }
-}
+
 
 Model.purchase = function (date, address, cardNumber, cardOwner) {
   number= new Date().getTime();
@@ -322,8 +303,10 @@ Model.getOrder=function(matching){
       user.shoppingCart.qty =  user.shoppingCart.qty +  user.shoppingCart.items[i].qty;
       user.shoppingCart.subtotal =  user.shoppingCart.subtotal +  user.shoppingCart.items[i].total;
    }
+   
     user.shoppingCart.tax =  user.shoppingCart.subtotal * 0.21;
     user.shoppingCart.total =  user.shoppingCart.subtotal +  user.shoppingCart.tax;
+    
  }
  
 
@@ -345,8 +328,25 @@ Model.getOrder=function(matching){
           item.price = product.price;
           item.total = item.qty * item.price;
         }  }  }
+       
     this.updateShoppingCart(user);
     return user.shoppingCart;
   }
+
+  Model.removeAll = function (uid, pid) {
+    var product = Model.getProductById(pid);
+    var user = Model.getUserById(uid);
+    
+
+    for (var i = 0; i < user.shoppingCart.items.length; i++) {
+      if (user.shoppingCart.items[i].product == pid) {
+        user.shoppingCart.items.splice(i, 1);
+      }
+    }
+    
+    this.updateShoppingCart(user);
+    return user.shoppingCart;
+    console.log('Cart', user.shoppingCart)
+  };
 module.exports = Model;
 

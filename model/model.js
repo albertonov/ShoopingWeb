@@ -128,9 +128,11 @@ Model.signin = function (email, password) {
 
 Model.signup = function (name, surname, address, birth, email, password) {
   Model.user = null;
-  for (x in Model.users) {
-    if (Model.users[x].email == email) return null;
-  }
+  
+  for (var i = 0; i < Model.users.length; i++)
+    if (Model.users[i].email == email){
+      return null;
+    }
 
   newUser = (
     {

@@ -17,6 +17,7 @@ var app = express();
 app.use(express.urlencoded({ extended: true }));
 var cookieParser = require('cookie-parser');
 const { Console } = require('console');
+const { user } = require('./model/model');
 app.use(cookieParser());
 // Load logger module
 app.use(logger('dev'));
@@ -45,7 +46,6 @@ console.log('EasyPCy WebApp listening on port 3000!');
 
 
 app.post('/api/users/signin', function (req, res, next) {
-  console.log(req.body)
   var user = model.signin(req.body.email, req.body.password)
   if (user) {
     res.cookie('userid', user._id);
@@ -54,9 +54,18 @@ app.post('/api/users/signin', function (req, res, next) {
   else return res.status(401).send({ message: 'Invalid email or password' });
 });
 
+app.post('/api/users/signup', function (req, res, next) {
+  var user = model.signup(req.body.name, req.body.surname, req.body.address, req.body.birth, req.body.email, req.body.password)
+  if (user != null) {
+    return res.json(user);
+  }
+  else {console.log("Tried to signUp a new user. Email is repeated");return res.status(401).send({ message: 'Invalid email' });}
+});
+
 
 app.get('/api/cart/qty', function (req, res, next) {
   var userid = req.cookies.userid;
+  
   if (!userid) return res.status(401).send({ message: 'User has not signed in' });
   var userCartQty = model.getUserCartQty(userid);
   if (userCartQty) return res.json(userCartQty);

@@ -5,13 +5,19 @@
     form.classList.add('was-validated');
     if (form.checkValidity()) {
       if( $('#password').val() == $('#passwordconfirm').val() ){
-        var result = Model.signup($('#name').val(), $('#surname').val(), $('#address').val(), $('#birth').val(), $('#email').val(), $('#password').val());
-        //
-        if (result != null) {navigateTo('/signin')}
+        var result = Model.signup($('#name').val(), $('#surname').val(), $('#address').val(), $('#birth').val(), $('#email').val(), $('#password').val())
+      .done(function (user) {
+        Messages.success.push(`User registered ${user.name } ${user.surname}`)
+        navigateTo('/signin');
+      })
+      .fail(function (error) {
+        Messages.danger.push(`Email Invalid`);
+        navigateTo('/signup');
+      })
       }
       else{
-        console.log("NOT EQUALS")
-        $(".alert").show()
+        Messages.danger.push(`Passwords are not equals!`);
+        //pwdws not equals
       }
 
     } else {

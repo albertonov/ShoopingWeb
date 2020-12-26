@@ -73,6 +73,8 @@
       var context = {}
       context.messages = { success: Messages.success, danger: Messages.danger };
       Messages.clear();
+
+      
       var p = Model.getUserCartQty()
       .done(function (userCartQty) { context.user = userCartQty; })
       .fail(function (error) { console.error(error); })
@@ -98,7 +100,8 @@
             render('/templates/cart.hbs', '#contents', context); })
             });
       }
-
+      else if (matching = path.match(/^\/profile$/))
+            return p.always(function () { render('/templates/profile.hbs', '#contents', context); })
 
     
           else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
@@ -106,8 +109,7 @@
             context.order=order;
             if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
             else return p.always(function () { render('/templates/not-found.hbs', '#contents', context); });}  
-          else if (matching = path.match(/^\/profile$/))
-            return p.always(function () { render('/templates/profile.hbs', '#contents', context); })
+
           else if (matching = path.match(/^\/purchase$/))
             return p.always(function () { render('/templates/purchase.hbs', '#contents', context); })
           else if (matching = path.match(/^\/signin$/))

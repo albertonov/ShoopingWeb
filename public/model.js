@@ -11,6 +11,14 @@ var Model = {}
         data: { email, password }
       });
   }
+  Model.signup = function (name, surname, address, birth, email, password) {
+    result = $.ajax({
+        url: '/api/users/signup',
+        method: 'POST',
+        data: {name, surname, address, birth, email, password}
+      });
+    return result;
+  }
 
   Model.getUserId = function () {
     var decoded = decodeURIComponent(document.cookie);
@@ -38,6 +46,5 @@ var Model = {}
   }
 
   Model.removeAllItems = function(pid){
-    console.log("'/api/cart/items/product/" + pid + "/all")
     return $.ajax({ url: '/api/cart/items/product/' + pid + '/all', method: 'DELETE' })
   }

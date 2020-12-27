@@ -111,7 +111,7 @@ Model.users = [{
   birth: '1998-09-12',
   address: 'ESII, UCLM',
   shoppingCart: { items: [], qty:0, total:0, subtotal:0, tax:0 },
-  orders: []
+  orders: ['hhhhhhhhhhhhhhhhhhhhhhh']
 }];
 idCounter = 101;
 
@@ -249,6 +249,9 @@ Model.getOrder=function(matching){
   return order;
   };
 
+  Model.getCurrentProfile = function (){
+    return Model.user;
+  }
 
   Model.getUserById = function (userid) {
     for (var i = 0; i < Model.users.length; i++) {
@@ -315,7 +318,10 @@ Model.getOrder=function(matching){
  Model.getCartByUserId = function (uid) {
   return Model.getUserById(uid).shoppingCart;
   }
-  
+
+ Model.getOrdersByUserId = function (uid){
+  return Model.getUserById(uid).orders;
+ }
   Model.removeOne = function (uid, pid) {
     var product = Model.getProductById(pid);
     var user = Model.getUserById(uid);

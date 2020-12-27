@@ -41,6 +41,13 @@ var Model = {}
     return $.ajax({ url: '/api/cart', method: 'GET' })
   }
 
+  Model.getOrders = function (){
+    return $.ajax({ url: '/api/orders', method: 'GET' })
+  }
+
+  Model.getProfile = function(){
+    return $.ajax({ url: '/api/profile', method: 'GET' })
+  }
   Model.removeOne = function (pid) {
     return $.ajax({ url: '/api/cart/items/product/' + pid + '/one', method: 'DELETE' })
   }

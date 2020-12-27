@@ -76,7 +76,7 @@
 
       
       var p = Model.getUserCartQty()
-      .done(function (userCartQty) { context.user = userCartQty; })
+      .done(function (userCartQty) {  context.user = userCartQty; })
       .fail(function (error) { console.error(error); })
 
       if (matching = path.match(/^\/index$/)) {
@@ -101,7 +101,14 @@
             });
       }
       else if (matching = path.match(/^\/profile$/))
-            return p.always(function () { render('/templates/profile.hbs', '#contents', context); })
+            return Model.getProfile()
+            .done(function (result) { context.user = result; })
+            .fail(function (error) { console.error(error); })
+
+            .always(function () {
+            return p.always(function () {
+            render('/templates/profile.hbs', '#contents', context); })
+            });
 
     
           else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
@@ -112,6 +119,9 @@
 
           else if (matching = path.match(/^\/purchase$/))
             return p.always(function () { render('/templates/purchase.hbs', '#contents', context); })
+
+
+
           else if (matching = path.match(/^\/signin$/))
             return p.always(function () { render('/templates/signin.hbs', '#contents', context); })
           else if (matching = path.match(/^\/signup$/))

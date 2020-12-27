@@ -12,7 +12,7 @@
                     </div>   
                 </div>
             </div>
-
+            
             <div class="row justify-content-center">
                 <div class="col-md-9">
                     <div class="col-md-9">
@@ -33,7 +33,6 @@
                 </div>
             </div>
             
-
             {{#if (hasNotOrders user)}}
             <h4 class="card-name row justify-content-center">No orders founded</h4> <br><br>
             {{else}} 
@@ -49,17 +48,17 @@
 
 
             
-                <div class="table-responsive col-md-9">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Number</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Total</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <div class="table-responsive col-md-9">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Number</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Total</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {{#each user.orders}}
                         <tr>    
                             <td >{{this.number}}</td>
@@ -74,7 +73,8 @@
                     </table>
                 </div>
             
-            {{/if}}
+            {{/if}}        
+
         </div>
         
             

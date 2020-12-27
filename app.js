@@ -26,7 +26,6 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname ,'public')));
 
 app.get('/api/products', function (req, res, next) {
-  console.log("PRODUCTS")
   return res.json(model.products);
   });
 
@@ -51,7 +50,7 @@ app.post('/api/users/signin', function (req, res, next) {
     res.cookie('userid', user._id);
     return res.json(user);
   }
-  else return res.status(401).send({ message: 'Invalid email or password' });
+  else{console.log("Tried to signin a new user. Email or password invalid"); return res.status(401).send({ message: 'Invalid email or password' });}
 });
 
 app.post('/api/users/signup', function (req, res, next) {
@@ -86,10 +85,9 @@ app.get('/api/cart/qty', function (req, res, next) {
 
 
   app.get('/api/cart', function (req, res, next) {
-    console.log("CARTTTTTT")
+    
     var uid = req.cookies.userid;
     var cart = model.getCartByUserId(uid);
-    console.log("CARTTTTT2222")
     if (cart) { return res.json(cart); }
     else return res.status(401).send({ message: 'User shopping cart not found' });
     });
@@ -119,6 +117,25 @@ function (req, res, next) {
     { message: 'User or Product not found' });
 });
 
+
+
+app.get('/api/orders', function (req, res, next) {
+    
+  var uid = req.cookies.userid;
+  var orders = model.getOrdersByUserId(uid);
+  if (orders) { return res.json(orders); }
+  else return res.status(401).send({ message: 'User orders not found' });
+  });
+
+
+  app.get('/api/profile', function (req, res, next) {
+    
+    
+    var profile = model.getCurrentProfile();
+    console.log(profile)
+    if (profile) { return res.json(profile); }
+    else return res.status(401).send({ message: 'User  not found' });
+    });
 app.get(/\/.*/, function (req, res) {
     res.sendFile(path.join(__dirname ,'/public/index.html'));
   });

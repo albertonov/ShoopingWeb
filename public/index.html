@@ -69,16 +69,15 @@
       var path = location.pathname;
       var matching = null;  
       console.log('Routing ', path);  
-
+      
       var context = {}
       context.messages = { success: Messages.success, danger: Messages.danger };
       Messages.clear();
 
-      
       var p = Model.getUserCartQty()
       .done(function (userCartQty) {  context.user = userCartQty; })
       .fail(function (error) { console.error(error); })
-
+      
       if (matching = path.match(/^\/index$/)) {
           return Model.getProducts()
             .done(function (result) { context.products = result; })
@@ -112,13 +111,34 @@
 
     
           else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
-            var order = Model.getOrder(matching[1])
-            context.order=order;
-            if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
-            else return p.always(function () { render('/templates/not-found.hbs', '#contents', context); });}  
+            
+            
+            Model.getOrder(matching[1])
+            .done(function (result) { context.order = result; })
+            .fail(function (error) { console.error(error); })
+            
+            .always(function () {
+              console.log(context.order)
+            return p.always(function () {
+            render('/templates/order.hbs', '#contents', context); })
+            });
+            
 
-          else if (matching = path.match(/^\/purchase$/))
-            return p.always(function () { render('/templates/purchase.hbs', '#contents', context); })
+           // if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
+            //else return p.always(function () { render('/templates/not-found.hbs', '#contents', context); });}  
+          }
+
+          else if (matching = path.match(/^\/purchase$/)){
+            return Model.getProfile()
+            .done(function (result) { context.user = result; })
+            .fail(function (error) { console.error(error); })
+
+            .always(function () {
+            return p.always(function () {
+            render('/templates/purchase.hbs', '#contents', context); })
+            });
+
+          }
 
 
 
@@ -127,8 +147,9 @@
           else if (matching = path.match(/^\/signup$/))
             return p.always(function () { render('/templates/signup.hbs', '#contents', context); })
           else {
-            return p.always(function () { render('/templates/not-found.hbs', '#contents', context); })
-        }
+            console.log("AQUI DEBERIA DE NO ENTRAR EN UN PUÑETERO BUCLE INFINITO")
+            return p.always(function () { render('/templates/notFound.hbs', '#contents', context); })
+          }
     }
     
     

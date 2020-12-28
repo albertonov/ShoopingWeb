@@ -111,7 +111,7 @@ Model.users = [{
   birth: '1998-09-12',
   address: 'ESII, UCLM',
   shoppingCart: { items: [], qty:0, total:0, subtotal:0, tax:0 },
-  orders: ['hhhhhhhhhhhhhhhhhhhhhhh']
+  orders: []
 }];
 idCounter = 101;
 
@@ -212,21 +212,27 @@ Model.removeOneCartItem = function (id) {
 
 
 
-Model.purchase = function (date, address, cardNumber, cardOwner) {
+Model.purchase = function (date, address, cardNumber, cardOwner, uid) {
+  
   number= new Date().getTime();
   Model.order.number= number;
   Model.order.date= date;
   Model.order.address= address;
   Model.order.cardNumber= cardNumber;
   Model.order.cardOwner= cardOwner;
-  Model.order.subtotal= Model.user.shoppingCart.subtotal;
-  Model.order.tax= Model.user.shoppingCart.tax;
-  Model.order.total= Model.user.shoppingCart.total;
-  Model.order.items= Model.user.shoppingCart.items;
-  Model.user.orders.push(vOrder = Object.assign({}, Model.order));
+
+  currentUser = this.getUserById(uid)
+
+  console.log(currentUser)
+  Model.order.subtotal= currentUser['shoppingCart'].subtotal; 
+  Model.order.tax= currentUser['shoppingCart'].tax;
+  Model.order.total= currentUser['shoppingCart'].total;
+  Model.order.items= currentUser['shoppingCart'].items;
+  currentUser.orders.push(vOrder = Object.assign({}, Model.order));
 
   Model.resetCart();
-
+  console.log("PARAMETRO DESCRIPTIVO "+number)
+  return number;
 }
 
 Model.resetCart = function () {

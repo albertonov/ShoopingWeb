@@ -4,8 +4,9 @@
     var form = document.getElementById('purchase-form');
     form.classList.add('was-validated');
     if (form.checkValidity()) {
-      Model.purchase($('#date').val(), $('#address').val(), $('#cardNumber').val(), $('#cardOwner').val());
-      navigateTo("/order/id/"+Model.order.number);
+      Model.purchase($('#date').val(), $('#address').val(), $('#cardNumber').val(), $('#cardOwner').val())
+      .done(function (result) { navigateTo( "/order/id/" + result) })
+      .fail(function (error) { console.error(error); })
     } else {
       console.log('invalid');
     }
@@ -66,9 +67,9 @@
                         <tbody>
                           {{#each user.shoppingCart.items}}
                             <tr>    
-                                <td>{{this.qtyItem}}</td>
+                                <td>{{this.qty}}</td>
                                 <td>{{this.title}}</td>
-                                <td>{{formatPrice (multiplicate this.qtyItem this.price)}}</td>
+                                <td>{{formatPrice (multiplicate this.qty this.price)}}</td>
                             </tr>
                           {{/each}}
                         </tbody>

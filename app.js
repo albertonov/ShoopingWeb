@@ -83,6 +83,20 @@ app.get('/api/cart/qty', function (req, res, next) {
       { message: 'User or Product not found' });
   });
 
+  app.post('/api/orders', 
+  function (req, res, next) {
+    
+    var date = req.body.date;
+    var address = req.body.address;
+    var cardNumber = req.body.cardNumber;
+    var cardOwner = req.body.cardOwner;
+    var uid = req.cookies.userid;
+    var cart = model.purchase(date, address, cardNumber, cardOwner, uid);
+    
+    if (cart) { return res.json(cart);}
+    else {console.log("hrsueihfuisehoguishiuhessueihgisuehguisrehoseosoeui");return res.status(401).send(
+      { message: 'User or Product not found' });}
+  });
 
   app.get('/api/cart', function (req, res, next) {
     
@@ -136,6 +150,16 @@ app.get('/api/orders', function (req, res, next) {
     if (profile) { return res.json(profile); }
     else return res.status(401).send({ message: 'User  not found' });
     });
+
+  app.get('/api/orders/id/:oid') , function (req, res, next) {
+    
+    var oid = req.params.oid;
+    var order = model.getOrder(oid);
+    
+    if (order) { return res.json(order); }
+    else return res.status(401).send({ message: 'Order  not found' });
+  }
+
 app.get(/\/.*/, function (req, res) {
     res.sendFile(path.join(__dirname ,'/public/index.html'));
   });

@@ -55,3 +55,19 @@ var Model = {}
   Model.removeAllItems = function(pid){
     return $.ajax({ url: '/api/cart/items/product/' + pid + '/all', method: 'DELETE' })
   }
+
+
+
+  Model.purchase = function(date, address, cardNumber, cardOwner){
+    result = $.ajax({
+        url: '/api/orders',
+        method: 'POST',
+        data: {date, address, cardNumber, cardOwner}
+      });
+    return result;
+  }
+
+  Model.getOrder = function(oid){
+    console.log("HOLA MUNDO")
+    return $.ajax({ url: '/api/orders/id/'+oid, method: 'GET' });
+  }

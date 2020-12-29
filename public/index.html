@@ -112,16 +112,20 @@
     
           else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
             
-            
-            Model.getOrder(matching[1])
+            console.log("Matching: "+ matching[1])
+            var de = matching[1];
+            console.log(de);
+            console.log(de.toString());
+            Model.getOrder(de)
             .done(function (result) { context.order = result; })
             .fail(function (error) { console.error(error); })
-            
+          
             .always(function () {
+              console.log("CONTEXT ORDER: ")
               console.log(context.order)
             return p.always(function () {
             render('/templates/order.hbs', '#contents', context); })
-            });
+            }); 
             
 
            // if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
@@ -147,7 +151,6 @@
           else if (matching = path.match(/^\/signup$/))
             return p.always(function () { render('/templates/signup.hbs', '#contents', context); })
           else {
-            console.log("AQUI DEBERIA DE NO ENTRAR EN UN PUÑETERO BUCLE INFINITO")
             return p.always(function () { render('/templates/notFound.hbs', '#contents', context); })
           }
     }

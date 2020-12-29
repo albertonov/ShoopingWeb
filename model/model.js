@@ -161,7 +161,7 @@ Model.addToCart = function(id){
   for (k = 0; k< Model.products.length; k++) {
     if (Model.products[k]._id == id){
         productoToAdd = Model.products[k];
-        console.log("Added: "+ Model.products[k].title)
+        
         //comprobar si el elemento ya esta añadido a la lista
         for (i=0; i<Model.user.shoppingCart.items.length; i++){
           if (Model.user.shoppingCart.items[i]._id == productoToAdd._id){
@@ -223,7 +223,7 @@ Model.purchase = function (date, address, cardNumber, cardOwner, uid) {
 
   currentUser = this.getUserById(uid)
 
-  console.log(currentUser)
+  
   Model.order.subtotal= currentUser['shoppingCart'].subtotal; 
   Model.order.tax= currentUser['shoppingCart'].tax;
   Model.order.total= currentUser['shoppingCart'].total;
@@ -231,7 +231,7 @@ Model.purchase = function (date, address, cardNumber, cardOwner, uid) {
   currentUser.orders.push(vOrder = Object.assign({}, Model.order));
 
   Model.resetCart();
-  console.log("PARAMETRO DESCRIPTIVO "+number)
+  
   return number;
 }
 
@@ -252,6 +252,7 @@ Model.getOrder=function(matching){
         order=Model.user.orders[i];
       }
   }
+  
   return order;
   };
 
@@ -285,7 +286,7 @@ Model.getOrder=function(matching){
 
 
   Model.buy = function (uid, pid) {
-    console.log("comprando product")
+    
     var product = Model.getProductById(pid);
     var user = Model.getUserById(uid);
      if (user && product) {
@@ -360,7 +361,7 @@ Model.getOrder=function(matching){
     
     this.updateShoppingCart(user);
     return user.shoppingCart;
-    console.log('Cart', user.shoppingCart)
+    
   };
 module.exports = Model;
 

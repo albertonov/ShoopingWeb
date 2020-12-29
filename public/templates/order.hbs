@@ -1,5 +1,6 @@
 {{> navBar this}}
 {{> messages this}}
+<br><br>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-9">
@@ -49,9 +50,9 @@
                     <tbody>
                         {{#each order.items}}
                         <tr>    
-                            <td >{{this.qtyItem}}</td>
+                            <td >{{this.qty}}</td>
                             <td>{{this.title}}</td>
-                            <td class=" d-flex justify-content-end">{{formatPrice (multiplicate this.qtyItem this.price)}}</td>
+                            <td class=" d-flex justify-content-end">{{formatPrice (multiplicate this.qty this.price)}}</td>
                         </tr>
                         {{/each}}
                     </tbody>

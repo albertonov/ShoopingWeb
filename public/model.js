@@ -70,7 +70,6 @@ Model.purchase = function (date, address, cardNumber, cardOwner) {
 Model.getOrder = function (oid) {
 
   var url = '/api/orders/id/' + oid
-  console.log(url)
   result = $.ajax({ url: url, method: 'GET' })
   return result;
 }

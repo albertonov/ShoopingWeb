@@ -9,13 +9,13 @@ var path = require('path');
 
 // Import logger module
 var logger = require('morgan');
+var cookieParser = require('cookie-parser');
 
 var model = require('./model/model');
 // Instantiate the express middleware
 var app = express();
 
 app.use(express.urlencoded({ extended: true }));
-var cookieParser = require('cookie-parser');
 const { Console } = require('console');
 const { user } = require('./model/model');
 app.use(cookieParser());

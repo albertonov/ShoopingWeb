@@ -2,12 +2,14 @@
   function removeOneItem_clicked (event,id) {
     event.preventDefault();
     Model.removeOne(id);
+    Messages.success.push(`Item removed!`)
     navigateTo('/cart');
    };
 
   function removeAllItems_clicked (event,id) {
     event.preventDefault();
     Model.removeAllItems(id);
+    Messages.success.push(`All item class removed!`)
     navigateTo('/cart');
   };
 </script>

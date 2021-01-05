@@ -1,4 +1,9 @@
+var User = require('./user');
+var Cart = require('./shopping-cart')
+var Product = require('./product');
 var Model = {}
+
+
 Model.products = [
   {
     _id: 1,
@@ -99,7 +104,11 @@ Model.products = [
 ];
 
 
-
+Model.getProducts = function(){
+  result =  Product.find();
+  console.log(result);
+  return result;
+ }
 
 Model.order=[{}];
 
@@ -118,39 +127,18 @@ idCounter = 101;
 Model.user = null;
 
 Model.signin = function (email, password) {
-  Model.user = null;
-  for (var i = 0; i < Model.users.length; i++) {
-    if (Model.users[i].email == email && Model.users[i].password == password)
-      Model.user = Model.users[i];
+  return User.findOne({ email, password });
   }
-  return Model.user;
-};
 
 Model.signup = function (name, surname, address, birth, email, password) {
-  Model.user = null;
-  
-  for (var i = 0; i < Model.users.length; i++)
-    if (Model.users[i].email == email){
-      return null;
-    }
-
-  newUser = (
-    {
-      _id: idCounter, 
-      email: email,
-      password: password,
-      name: name,
-      surname: surname,
-      birth: birth,
-      address: address,
-      shoppingCart: { items: [], qty:0, total:0, subtotal:0, tax:0 },
-      orders: []
-    }
-  )
-  idCounter +=1;
-  Model.users.push(newUser);
-  return newUser;
-};
+  return User.findOne({ email })
+    .then(function (user) {
+      if (!user) {
+        var cart = new Cart({ items: [], qty: 0, total: 0, subtotal: 0, tax: 0 });
+        var user = new User({ email, password, name, surname, birth, address, shoppingCart: cart });
+        return cart.save().then(function () { return user.save(); })
+      } else return null;
+  })} 
 
 Model.signout = function () {
   Model.user = null;
@@ -267,11 +255,13 @@ Model.getOrder=function(matching){
     }
   return null;
   }
-  
+
+
+  Model.getUserByIdWithCart = function (userid) {
+    return User.findById(userid).populate('shoppingCart');
+  }
   Model.getUserCartQty = function (userid) {
-    var user = Model.getUserById(userid);
-    if (user) return { shoppingCart: { qty: user.shoppingCart.qty } };
-    else return null;
+    return User.findById(userid).populate({ path: 'shoppingCart', select: 'qty' })
   }
 
 
@@ -286,27 +276,31 @@ Model.getOrder=function(matching){
 
 
   Model.buy = function (uid, pid) {
-    
-    var product = Model.getProductById(pid);
-    var user = Model.getUserById(uid);
-     if (user && product) {
-      var item;
-      for (var i = 0; i < user.shoppingCart.items.length; i++) {
-        if (user.shoppingCart.items[i].product == pid)
-          item = user.shoppingCart.items[i];
-      }   if (!item) {
-        item = { qty: 0, product: product.title };
-        user.shoppingCart.items.push(item);
-      }
-      item.qty++;
-      item.product = product._id;
-      item.title = product.title;
-      item.price = product.price;
-      item.total = item.qty * item.price;
-      this.updateShoppingCart(user);
-      return user.shoppingCart;
-    } else return null;
+    return Promise.all([Model.getProductById(pid), Model.getUserByIdWithCart(uid)])
+      .then(function (results) {
+        var product = results[0];
+        var user = results[1];
+        if (user && product) {
+          var item = null;
+          for (var i = 0; i < user.shoppingCart.items.length; i++) {
+            if (user.shoppingCart.items[i].product == pid) {
+              item = user.shoppingCart.items[i];
+              user.shoppingCart.items.remove(item);
+            }
+          }
+          if (!item) { item = { qty: 0 }; }
+          item.qty++;
+          item.title = product.title;        
+          item.price = product.price;
+          item.total = item.qty * item.price;
+          user.shoppingCart.items.push(item);
+          Model.updateShoppingCart(user);
+          return user.shoppingCart.save()
+            .then(function (result) { return result });
+        } else return null;
+      }).catch(function (errors) { console.error(errors); return null; })
   }
+  
 
   Model.updateShoppingCart = function (user) {
     user.shoppingCart.qty = 0;
@@ -321,7 +315,7 @@ Model.getOrder=function(matching){
     
  }
  
-
+/////////////////////////////////////////////////////
  Model.getCartByUserId = function (uid) {
   return Model.getUserById(uid).shoppingCart;
   }
@@ -363,5 +357,7 @@ Model.getOrder=function(matching){
     return user.shoppingCart;
     
   };
+
+
 module.exports = Model;
 

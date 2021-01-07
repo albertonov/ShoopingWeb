@@ -13,7 +13,8 @@ var schema = Schema({
         qty: { type: Number, required: true },
         price: { type: Number, required: true },
         total: { type: Number, required: true },
-        product: { type: Schema.Types.ObjectId, ref: 'Product' }
+        //product: { type: Schema.Types.ObjectId, ref: 'Product' }
+        product: { type: String }
       }]
   }
 });

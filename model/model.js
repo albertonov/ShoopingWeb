@@ -3,7 +3,7 @@ var Cart = require('./shopping-cart')
 var Product = require('./product');
 var Model = {}
 
-
+/*
 Model.products = [
   {
     _id: 1,
@@ -103,10 +103,10 @@ Model.products = [
   }
 ];
 
-
+*/
 Model.getProducts = function(){
   result =  Product.find();
-  console.log(result);
+  
   return result;
  }
 
@@ -268,10 +268,7 @@ Model.getOrder=function(matching){
 
 
   Model.getProductById = function (pid) {
-    for (var i = 0; i < Model.products.length; i++)
-      if (Model.products[i]._id == pid)
-        return Model.products[i];
-    return null;
+      return Product.findById(pid);
   }
 
 
@@ -280,6 +277,7 @@ Model.getOrder=function(matching){
       .then(function (results) {
         var product = results[0];
         var user = results[1];
+        console.log(user.shoppingCart)
         if (user && product) {
           var item = null;
           for (var i = 0; i < user.shoppingCart.items.length; i++) {
@@ -289,10 +287,14 @@ Model.getOrder=function(matching){
             }
           }
           if (!item) { item = { qty: 0 }; }
+          item.product = product._id;
           item.qty++;
-          item.title = product.title;        
+          item.title = product.title;     
+          
           item.price = product.price;
           item.total = item.qty * item.price;
+          console.log("...............................................................")
+          console.log(item)
           user.shoppingCart.items.push(item);
           Model.updateShoppingCart(user);
           return user.shoppingCart.save()
@@ -300,6 +302,7 @@ Model.getOrder=function(matching){
         } else return null;
       }).catch(function (errors) { console.error(errors); return null; })
   }
+  
   
 
   Model.updateShoppingCart = function (user) {

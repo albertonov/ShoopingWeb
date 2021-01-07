@@ -1,5 +1,6 @@
 <script>
 function buy_clicked(event, _id) {
+  console.log(_id)
   event.preventDefault();
   Model.buy(_id)
     .done(function () {

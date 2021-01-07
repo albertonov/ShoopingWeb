@@ -101,7 +101,8 @@
       }
       else if (matching = path.match(/^\/profile$/))
             return Model.getProfile()
-            .done(function (result) { context.user = result; })
+            .done(function (result) { context.user = result; 
+            console.log(context.user)})
             .fail(function (error) { console.error(error); })
 
             .always(function () {
@@ -133,11 +134,12 @@
           }
 
           else if (matching = path.match(/^\/purchase$/)){
-            return Model.getProfile()
-            .done(function (result) { context.user = result; })
+            return Model.getCart()
+            .done(function (result) { context.user.shoppingCart = result; })
             .fail(function (error) { console.error(error); })
 
             .always(function () {
+              console.log(context.user)
             return p.always(function () {
             render('/templates/purchase.hbs', '#contents', context); })
             });
@@ -202,12 +204,13 @@
 
     <script>
         Handlebars.registerHelper('hasNotOrders', function (user) {
+          
         return user.orders.length == 0;
         });
     </script>
     <script>
           Handlebars.registerHelper('hasNotCartItems', function (user) {
-          return user.shoppingCart.items.length == 0;
+          return user.shoppingCart.qty == 0;
           });
     </script>
     <script>

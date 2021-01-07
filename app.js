@@ -96,10 +96,42 @@ app.post('/api/users/signup', function (req, res, next) {
   app.get('/api/cart', function (req, res, next) {
 
     var uid = req.cookies.userid;
-    var cart = model.getCartByUserId(uid);
-    if (cart) { return res.json(cart); }
-    else return res.status(401).send({ message: 'User shopping cart not found' });
+    return model.getCartByUserId(uid)
+      .then(function(cart){
+        if (cart) { return res.json(cart); }
+        else return res.status(401).send({ message: 'User shopping cart not found' });
+      })
+
   });
+
+  app.delete('/api/cart/items/product/:id/one',
+  function (req, res, next) {
+
+    var pid = req.params.id;
+    var uid = req.cookies.userid;
+    return model.removeOne(uid, pid)
+      .then(function(result){
+        if (result) { return res.json(result); }
+        else return res.status(401).send(
+          { message: 'User or Product not found' });
+      })
+
+  });
+
+  app.delete('/api/cart/items/product/:id/all',
+  function (req, res, next) {
+
+    var pid = req.params.id;
+    var uid = req.cookies.userid;
+
+    return model.removeAll(uid, pid)
+      .then(function(result){
+        if (result) { return res.json(result); }
+        else return res.status(401).send(
+          { message: 'User or Product not found' });
+      })
+  });
+
 
 
   app.get('/api/cart/qty', function (req, res, next) {
@@ -143,28 +175,10 @@ app.post('/api/orders',
 
 
 
-app.delete('/api/cart/items/product/:id/one',
-  function (req, res, next) {
-
-    var pid = req.params.id;
-    var uid = req.cookies.userid;
-    var cart = model.removeOne(uid, pid);
-    if (cart) { return res.json(cart); }
-    else return res.status(401).send(
-      { message: 'User or Product not found' });
-  });
 
 
-app.delete('/api/cart/items/product/:id/all',
-  function (req, res, next) {
 
-    var pid = req.params.id;
-    var uid = req.cookies.userid;
-    var cart = model.removeAll(uid, pid);
-    if (cart) { return res.json(cart); }
-    else return res.status(401).send(
-      { message: 'User or Product not found' });
-  });
+
 
 
 
@@ -178,9 +192,12 @@ app.get('/api/orders', function (req, res, next) {
 
 
 app.get('/api/profile', function (req, res, next) {
-  var profile = model.getUserById(req.cookies.userid);
-  if (profile) { return res.json(profile); }
+  return model.getUserById(req.cookies.userid)
+  .then(function (profile) {
+    if (profile) {console.log(profile); return res.json(profile); }
   else return res.status(401).send({ message: 'User  not found' });
+  })
+  
 });
 
 app.get('/api/orders/id/:oid', function (req, res, next) {

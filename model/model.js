@@ -111,7 +111,7 @@ Model.getProducts = function(){
  }
 
 Model.order=[{}];
-
+/*
 Model.users = [{
   _id: 100, email: 'alberto@gmail.com',
   password: 'admin',
@@ -122,6 +122,7 @@ Model.users = [{
   shoppingCart: { items: [], qty:0, total:0, subtotal:0, tax:0 },
   orders: []
 }];
+*/
 idCounter = 101;
 
 Model.user = null;
@@ -144,59 +145,7 @@ Model.signout = function () {
   Model.user = null;
   }
 
-Model.addToCart = function(id){
-  var anadido = false
-  for (k = 0; k< Model.products.length; k++) {
-    if (Model.products[k]._id == id){
-        productoToAdd = Model.products[k];
-        
-        //comprobar si el elemento ya esta añadido a la lista
-        for (i=0; i<Model.user.shoppingCart.items.length; i++){
-          if (Model.user.shoppingCart.items[i]._id == productoToAdd._id){
-            Model.user.shoppingCart.items[i].qtyItem +=1;
-            Model.user.shoppingCart.qty +=1;
-            Model.user.shoppingCart.subtotal += Model.user.shoppingCart.items[i].price;
-            Model.user.shoppingCart.tax = Model.user.shoppingCart.subtotal * 0.21;
-            Model.user.shoppingCart.total = Model.user.shoppingCart.subtotal + Model.user.shoppingCart.tax;
-            anadido = true;
-          }
-        }
-        if (!anadido){
-          var lastElementIndex = Model.user.shoppingCart.items.push(productoToAdd);
-          Model.user.shoppingCart.items[lastElementIndex-1].qtyItem +=1;
-          Model.user.shoppingCart.qty +=1;
-          Model.user.shoppingCart.subtotal += productoToAdd.price;
-          Model.user.shoppingCart.tax = Model.user.shoppingCart.subtotal * 0.21;
-          Model.user.shoppingCart.total = Model.user.shoppingCart.subtotal + Model.user.shoppingCart.tax;
-          
-        }
-    }      
-  }
-};
 
-Model.removeOneCartItem = function (id) {
-  for (i=0; i<Model.user.shoppingCart.items.length; i++){
-    if (Model.user.shoppingCart.items[i]._id == id){
-          for (k=0; k<Model.products.length; k++) {
-            if(Model.products[k]._id == id){
-              var productReference = Model.products[k];
-            }
-          }
-          Model.user.shoppingCart.qty -=1;
-          Model.user.shoppingCart.subtotal -= productReference.price;
-          Model.user.shoppingCart.tax = Model.user.shoppingCart.subtotal * 0.21;
-          Model.user.shoppingCart.total = Model.user.shoppingCart.subtotal + Model.user.shoppingCart.tax;
-
-       if (Model.user.shoppingCart.items[i].qtyItem == 1){
-         //last element
-          Model.user.shoppingCart.items.splice(i, 1);
-       }
-       else{
-          Model.user.shoppingCart.items[i].qtyItem -= 1;
-       }
-    }
-  }
-};
 
 
 
@@ -244,23 +193,22 @@ Model.getOrder=function(matching){
   return order;
   };
 
-  Model.getCurrentProfile = function (){
+  /*Model.getCurrentProfile = function (){
     return Model.user;
-  }
+  }*/
 
   Model.getUserById = function (userid) {
-    for (var i = 0; i < Model.users.length; i++) {
-  if (Model.users[i]._id == userid)
-    return Model.users[i];
-    }
-  return null;
+    //
+    return User.findById(userid);
   }
 
 
   Model.getUserByIdWithCart = function (userid) {
+    //
     return User.findById(userid).populate('shoppingCart');
   }
   Model.getUserCartQty = function (userid) {
+    //
     return User.findById(userid).populate({ path: 'shoppingCart', select: 'qty' })
   }
 
@@ -268,11 +216,13 @@ Model.getOrder=function(matching){
 
 
   Model.getProductById = function (pid) {
+    //
       return Product.findById(pid);
   }
 
 
   Model.buy = function (uid, pid) {
+    //
     return Promise.all([Model.getProductById(pid), Model.getUserByIdWithCart(uid)])
       .then(function (results) {
         var product = results[0];
@@ -293,8 +243,6 @@ Model.getOrder=function(matching){
           
           item.price = product.price;
           item.total = item.qty * item.price;
-          console.log("...............................................................")
-          console.log(item)
           user.shoppingCart.items.push(item);
           Model.updateShoppingCart(user);
           return user.shoppingCart.save()
@@ -306,6 +254,7 @@ Model.getOrder=function(matching){
   
 
   Model.updateShoppingCart = function (user) {
+    //
     user.shoppingCart.qty = 0;
     user.shoppingCart.subtotal = 0;
    for (var i = 0; i <  user.shoppingCart.items.length; i++) {
@@ -318,35 +267,64 @@ Model.getOrder=function(matching){
     
  }
  
-/////////////////////////////////////////////////////
+
  Model.getCartByUserId = function (uid) {
-  return Model.getUserById(uid).shoppingCart;
+  //
+  return this.getUserByIdWithCart(uid)
+  .then(function (sc) { 
+    return sc.shoppingCart;
+  });
+
   }
 
  Model.getOrdersByUserId = function (uid){
   return Model.getUserById(uid).orders;
  }
-  Model.removeOne = function (uid, pid) {
-    var product = Model.getProductById(pid);
-    var user = Model.getUserById(uid);
-    if (!product || !user) return null;
-    for (var i = 0; i < user.shoppingCart.items.length; i++) {
-      if (user.shoppingCart.items[i].product == pid) {
-        var item = user.shoppingCart.items[i];
-        item.qty = item.qty - 1;
-        if (user.shoppingCart.items[i].qty < 1)
-          user.shoppingCart.items.splice(i, 1);
-        else {
-          item.price = product.price;
-          item.total = item.qty * item.price;
-        }  }  }
-       
-    this.updateShoppingCart(user);
-    return user.shoppingCart;
-  }
 
+  Model.removeOne = function (uid, pid) {
+    //
+    return Promise.all([Model.getProductById(pid), Model.getUserByIdWithCart(uid)])
+      .then(function (results){
+        var product = results[0];
+        var user = results[1];
+        if (!product || !user) return null;
+        return Cart.findById(user.shoppingCart)
+          .then( function (cart){
+            
+            for (var i = 0; i < cart.items.length; i++) {
+              if (cart.items[i].product == pid) {
+                var item = cart.items[i];
+                item.qty = item.qty - 1;
+                if (cart.items[i].qty < 1)
+                cart.items.splice(i, 1);
+                else {
+                  item.price = product.price;
+                  item.total = item.qty * item.price;
+                }  }  }
+               
+            cart = Model.updateOneCart(cart)
+            return cart.save();
+          })
+      }).catch(function (errors) { console.error(errors); return null; })
+  }
   Model.removeAll = function (uid, pid) {
-    var product = Model.getProductById(pid);
+    return Promise.all([Model.getProductById(pid), Model.getUserByIdWithCart(uid)])
+    .then(function (results){
+      var product = results[0];
+      var user = results[1];
+      if (!product || !user) return null;
+      return Cart.findById(user.shoppingCart)
+      .then( function (cart){
+        for (var i = 0; i < cart.items.length; i++) {
+          if (cart.items[i].product == pid) {
+            cart.items.splice(i, 1);
+          }
+        } 
+        cart = Model.updateOneCart(cart)
+        return cart.save();
+      })
+    }).catch(function (errors) { console.error(errors); return null; })
+    /*var product = Model.getProductById(pid);
     var user = Model.getUserById(uid);
     
 
@@ -358,8 +336,22 @@ Model.getOrder=function(matching){
     
     this.updateShoppingCart(user);
     return user.shoppingCart;
-    
+    */
   };
+  Model.updateOneCart = function(cart){
+    //
+    cart.qty = 0;
+    cart.subtotal = 0;
+    for (var i = 0; i <  cart.items.length; i++) {
+      cart.qty =  cart.qty +  cart.items[i].qty;
+      cart.subtotal =  cart.subtotal +  cart.items[i].total;
+     }
+   
+     cart.tax = cart.subtotal * 0.21;
+     cart.total =  cart.subtotal +  cart.tax;
+     return cart;
+  }
+
 
 
 module.exports = Model;

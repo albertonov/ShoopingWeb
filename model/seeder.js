@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var User = require('./user');
 var Cart = require('./shopping-cart');
 var Product = require('./product');
+var Order = require('./order');
 
 var uri = 'mongodb://localhost/gameshop';
 mongoose.Promise = global.Promise;
@@ -16,7 +17,7 @@ db.on('error', function (err) { console.error('Error ', err.message); });
 
 
 var cart = new Cart({ items: [], qty: 0, total: 0, subtotal: 0, tax: 0 });
-var user = new User({ email: 'alberto@gmail.com', password: 'admin', name: 'Alberto', surname: 'Novillo', birth: '2020-12-09', address: 'ESII, UCLM', shoppingCart: cart });
+var user = new User({ email: 'alberto@gmail.com', password: 'admin', name: 'Alberto', surname: 'Novillo', birth: '2020-12-09', address: 'ESII, UCLM', shoppingCart: cart, order:[] });
 
 var products = [
   {
@@ -116,14 +117,31 @@ var products = [
     qtyItem: 0
   }
 ];
-
+var neworder = new Order({
+  'items': [{
+    'qty': 1,
+    'product': "1",
+    'title': "Microsoft Surface Pro 7",
+    'price': 999.99,
+    'total': 999.99
+}],
+'qty': 1,
+'total': 1209.9879,
+'subtotal': 999.99,
+'tax': 209.9979,
+'user': user
+});
+console.log(user)
+user.orders.push(neworder)
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(function () { return Cart.deleteMany() })
 .then(function () { return User.deleteMany() })
 .then(function () { return Product.deleteMany() })
+.then(function () { return Order.deleteMany() })
 .then(function () { return cart.save() })
 .then(function () { return user.save() })
+.then(function () { return neworder.save() })
 .then(function () { return db.collection("products").insertMany(products) })
 .then(function () { return mongoose.disconnect(); })
 .catch(function (err) { console.error('Error ', err.message); })

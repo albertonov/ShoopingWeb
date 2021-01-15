@@ -8,7 +8,8 @@ var schema = Schema({
   surname: { type: String, required: true },
   address: { type: String, required: true },
   birth: { type: Date, required: true },
-  shoppingCart: { type: Schema.Types.ObjectId, ref: 'ShoppingCart' }
+  shoppingCart: { type: Schema.Types.ObjectId, ref: 'ShoppingCart' },
+  orders: [{type: Schema.Types.ObjectId, ref: 'Order'}]
 });
 
 

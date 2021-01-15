@@ -117,6 +117,8 @@ var products = [
     qtyItem: 0
   }
 ];
+
+number= new Date().getTime();
 var neworder = new Order({
   'items': [{
     'qty': 1,
@@ -129,10 +131,14 @@ var neworder = new Order({
 'total': 1209.9879,
 'subtotal': 999.99,
 'tax': 209.9979,
-'user': user
+'user_id': user,
+'number': number,
+'date': '1998-03-31',
+'cardNumber': 1111222233334444,
+'cardOwner': "Albero",
 });
-console.log(user)
-user.orders.push(neworder)
+
+user.orders.push(neworder);
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(function () { return Cart.deleteMany() })

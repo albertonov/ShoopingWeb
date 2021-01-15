@@ -1,6 +1,7 @@
 var User = require('./user');
 var Cart = require('./shopping-cart')
 var Product = require('./product');
+var Order = require('./order');
 var Model = {}
 
 /*
@@ -151,7 +152,33 @@ Model.signout = function () {
 
 Model.purchase = function (date, address, cardNumber, cardOwner, uid) {
   
-  number= new Date().getTime();
+  return Promise.all([Model.getUserById(uid), Model.getCartByUserId(uid)])
+  .then(function (results) {
+    var user = results[0];
+    var cart = results[1];
+    var number= new Date().getTime();
+    
+  var order = new Order({ 
+    'number': number,
+    'date': date,
+    'cardNumber': cardNumber,
+    'cardOwner': cardOwner,
+    'user': user,
+    'address':address,
+    'qty': cart.qty,
+    'total': cart.total,
+    'subtotal': cart.subtotal,
+    'tax': cart.tax,
+    'items':cart.items
+    
+   })
+   return order.save()
+
+  }).catch(function (errors) { console.error(errors); return null; })
+
+}
+
+  /*
   Model.order.number= number;
   Model.order.date= date;
   Model.order.address= address;
@@ -169,16 +196,20 @@ Model.purchase = function (date, address, cardNumber, cardOwner, uid) {
 
   Model.resetCart();
   
-  return number;
-}
+  return number;*/
 
-Model.resetCart = function () {
 
-  Model.user.shoppingCart.items =[];
-  Model.user.shoppingCart.qty = 0;
-  Model.user.shoppingCart.subtotal = 0;
-  Model.user.shoppingCart.tax = 0;
-  Model.user.shoppingCart.total = 0;
+Model.resetCart = function (uid) {
+  return Model.getUserByIdWithCart(uid)
+  .then(function (user) {
+    user.shoppingCart.items =[];
+    user.shoppingCart.qty = 0;
+    user.shoppingCart.subtotal = 0;
+    user.shoppingCart.tax = 0;
+    user.shoppingCart.total = 0;
+    console.log(user)
+    return user.shoppingCart.save()
+   });
 
 }
 
@@ -207,6 +238,10 @@ Model.getOrder=function(matching){
     //
     return User.findById(userid).populate('shoppingCart');
   }
+
+  Model.getUserByIdWithOrders = function (uid){
+    return Model.getUserById(uid).populate('orders');;
+   }
   Model.getUserCartQty = function (userid) {
     //
     return User.findById(userid).populate({ path: 'shoppingCart', select: 'qty' })
@@ -278,7 +313,8 @@ Model.getOrder=function(matching){
   }
 
  Model.getOrdersByUserId = function (uid){
-  return Model.getUserById(uid).orders;
+   //need to reswatch
+  return Model.getUserById(uid).populate('orders');;
  }
 
   Model.removeOne = function (uid, pid) {

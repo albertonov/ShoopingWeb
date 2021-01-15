@@ -73,6 +73,7 @@ app.listen(3000, function () {
 });
 
 app.post('/api/users/signin', function (req, res, next) {
+  
   return model.signin(req.body.email, req.body.password)
     .then(function (user) {
       if (user) {
@@ -85,6 +86,7 @@ app.post('/api/users/signin', function (req, res, next) {
 
 
 app.post('/api/users/signup', function (req, res, next) {
+  console.log(req.body.birth)
   return model.signup(req.body.name, req.body.surname, req.body.address, req.body.birth, req.body.email, req.body.password)
   .then(function (user) {
   if (user) return res.json(user);
@@ -162,7 +164,20 @@ app.post('/api/orders',
     var cardNumber = req.body.cardNumber;
     var cardOwner = req.body.cardOwner;
     var uid = req.cookies.userid;
-    var cart = model.purchase(date, address, cardNumber, cardOwner, uid);
+    
+    return model.purchase(date, address, cardNumber, cardOwner, uid)
+    .then(function (order){
+      console.log(order)
+      return model.resetCart(uid)
+      .then( function(user){
+        console.log(user)
+        return model.getUserByIdWithCart(uid)
+        .then( function(user){
+          user.orders.push(order)
+          return user.save()
+        })
+      })
+    }).catch(function (errors) { console.error(errors); return null; })
 
     if (cart) { return res.json(cart); }
     else {
@@ -192,7 +207,7 @@ app.get('/api/orders', function (req, res, next) {
 
 
 app.get('/api/profile', function (req, res, next) {
-  return model.getUserById(req.cookies.userid)
+  return model.getUserByIdWithOrders(req.cookies.userid)
   .then(function (profile) {
     if (profile) {console.log(profile); return res.json(profile); }
   else return res.status(401).send({ message: 'User  not found' });

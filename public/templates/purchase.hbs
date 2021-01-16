@@ -5,101 +5,101 @@
     form.classList.add('was-validated');
     if (form.checkValidity()) {
       Model.purchase($('#date').val(), $('#address').val(), $('#cardNumber').val(), $('#cardOwner').val())
-      .done(function (result) {console.log(result['number']); Messages.success.push(`Purchase Finished!`); navigateTo( "/order/id/" + result['number']) })
-      .fail(function (error) { console.error(error); })
+        .done(function (result) { console.log(result['number']); Messages.success.push(`Purchase Finished!`); navigateTo("/order/id/" + result['number']) })
+        .fail(function (error) { console.error(error); })
     } else {
       console.log('invalid');
     }
   }
 </script>
 {{> navBar this}}
-{{> header}}    
-{{> messages this}}  
-<main>   
-      <div class="container">
-        {{#if (hasNotCartItems user)}}
-        <h2 class="text-center text-md-center">No product items in the shopping cart yet</h2>
-        {{else}} 
-        <div class="row justify-content-center" >
-          <div class="col-md-10">
-              <h1 class="text-center text-md-left">Purchase</h1>
-          </div>   
-        </div>
-        
-        <br>
-        <div >
-          <form id="purchase-form" class="justify-content-center col-md-10" style="margin: 0 auto;">
-            <div class="form-group">
-                <label for="date" class="sr-only">Date</label>
-                <input type="date" id="date" class="form-control" placeholder="Date" required="" autofocus="">
-                <div class="invalid-feedback">The date field cannot be empty</div>
-            </div>
-            <div class="form-group">
-                <label for="cardNumber" class="sr-only">Address</label>
-                <input type="text" id="address" class="form-control" placeholder="address" required="">
-                <div class="invalid-feedback">The address field cannot be empty</div>
-            </div>
-            <div class="form-group">
-                <label for="cardNumber" class="sr-only">Card Number</label>
-                <input type="number" id="cardNumber" class="form-control" placeholder="CardNumber" required="">
-                <div class="invalid-feedback">The card number field cannot be empty</div>
-            </div>
-            <div class="form-group">
-                <label for="cardOwner" class="sr-only">Card Owner</label>
-                <input type="text" id="cardOwner" class="form-control" placeholder="cardOwner" required="">
-                <div class="invalid-feedback">The card owner field cannot be empty</div>
-            </div>
-            <div class="row justify-content-center" >
-              <div class="col-md-11">
-                  <h2 class="text-center">Items</h2>
-              </div>   
-            </div>
-              <div class="row justify-content-center">
-                <div class="table-responsive col-md-9">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">SubTotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          {{#each user.shoppingCart.items}}
-                            <tr>    
-                                <td>{{this.qty}}</td>
-                                <td>{{this.title}}</td>
-                                <td>{{formatPrice (multiplicate this.qty this.price)}}</td>
-                            </tr>
-                          {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-              </div>
-              <div class="row justify-content-center">
-                    <div class="col-md-9">
-                        <div class="col-md-9">
-                            <label for="SubTotal"><b>SubTotal:</b> {{formatPrice this.user.shoppingCart.subtotal}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="Taxes"><b>Taxes:</b> {{formatPrice this.user.shoppingCart.tax}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="Total"><b>Total:</b> {{formatPrice this.user.shoppingCart.total}}</label>
-                        </div>
-                    </div>
-                </div>
-            </form>   
-
-            <div class="row justify-content-center"  style="margin-right: 0%;">
-                <button type="button"   href="/index" onclick="checkout_clicked(event)" class="btn btn-primary">Check Out</button>
-            </div>
-            
-
-          
-        </div>
-      {{/if}}
+{{> header}}
+{{> messages this}}
+<main>
+  <div class="container">
+    {{#if (hasNotCartItems user)}}
+    <h2 class="text-center text-md-center">No product items in the shopping cart yet</h2>
+    {{else}}
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <h1 class="text-center text-md-left">Purchase</h1>
       </div>
-      <br><br><br><br>
-    </main>
-{{> footer}}   
+    </div>
+
+    <br>
+    <div>
+      <form id="purchase-form" class="justify-content-center col-md-10" style="margin: 0 auto;">
+        <div class="form-group">
+          <label for="date" class="sr-only">Date</label>
+          <input type="date" id="date" class="form-control" placeholder="Date" required="" autofocus="">
+          <div class="invalid-feedback">The date field cannot be empty</div>
+        </div>
+        <div class="form-group">
+          <label for="cardNumber" class="sr-only">Address</label>
+          <input type="text" id="address" class="form-control" placeholder="address" required="">
+          <div class="invalid-feedback">The address field cannot be empty</div>
+        </div>
+        <div class="form-group">
+          <label for="cardNumber" class="sr-only">Card Number</label>
+          <input type="number" id="cardNumber" class="form-control" placeholder="CardNumber" required="">
+          <div class="invalid-feedback">The card number field cannot be empty</div>
+        </div>
+        <div class="form-group">
+          <label for="cardOwner" class="sr-only">Card Owner</label>
+          <input type="text" id="cardOwner" class="form-control" placeholder="cardOwner" required="">
+          <div class="invalid-feedback">The card owner field cannot be empty</div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-11">
+            <h2 class="text-center">Items</h2>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="table-responsive col-md-9">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">SubTotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each user.shoppingCart.items}}
+                <tr>
+                  <td>{{this.qty}}</td>
+                  <td>{{this.title}}</td>
+                  <td>{{formatPrice (multiplicate this.qty this.price)}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-9">
+            <div class="col-md-9">
+              <label for="SubTotal"><b>SubTotal:</b> {{formatPrice this.user.shoppingCart.subtotal}}</label>
+            </div>
+            <div class="col-md-9">
+              <label for="Taxes"><b>Taxes:</b> {{formatPrice this.user.shoppingCart.tax}}</label>
+            </div>
+            <div class="col-md-9">
+              <label for="Total"><b>Total:</b> {{formatPrice this.user.shoppingCart.total}}</label>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="row justify-content-center" style="margin-right: 0%;">
+        <button type="button" href="/index" onclick="checkout_clicked(event)" class="btn btn-primary">Check Out</button>
+      </div>
+
+
+
+    </div>
+    {{/if}}
+  </div>
+  <br><br><br><br>
+</main>
+{{> footer}}

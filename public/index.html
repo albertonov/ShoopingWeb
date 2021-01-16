@@ -112,18 +112,12 @@
 
     
           else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
-            
             console.log("Matching: "+ matching[1])
             var de = matching[1];
-            console.log(de);
-            console.log(de.toString());
             Model.getOrder(de)
             .done(function (result) { context.order = result; })
             .fail(function (error) { console.error(error); })
-          
             .always(function () {
-              console.log("CONTEXT ORDER: ")
-              console.log(context.order)
             return p.always(function () {
             render('/templates/order.hbs', '#contents', context); })
             }); 

@@ -178,25 +178,6 @@ Model.purchase = function (date, address, cardNumber, cardOwner, uid) {
 
 }
 
-  /*
-  Model.order.number= number;
-  Model.order.date= date;
-  Model.order.address= address;
-  Model.order.cardNumber= cardNumber;
-  Model.order.cardOwner= cardOwner;
-
-  currentUser = this.getUserById(uid)
-
-  
-  Model.order.subtotal= currentUser['shoppingCart'].subtotal; 
-  Model.order.tax= currentUser['shoppingCart'].tax;
-  Model.order.total= currentUser['shoppingCart'].total;
-  Model.order.items= currentUser['shoppingCart'].items;
-  currentUser.orders.push(vOrder = Object.assign({}, Model.order));
-
-  Model.resetCart();
-  
-  return number;*/
 
 
 Model.resetCart = function (uid) {
@@ -207,26 +188,29 @@ Model.resetCart = function (uid) {
     user.shoppingCart.subtotal = 0;
     user.shoppingCart.tax = 0;
     user.shoppingCart.total = 0;
-    console.log(user)
     return user.shoppingCart.save()
    });
 
 }
 
-Model.getOrder=function(matching){
-  order = [];
-  for(var i = 0; i < Model.user.orders.length; i++){
-      if(matching == Model.user.orders[i].number){
-        order=Model.user.orders[i];
-      }
-  }
-  
-  return order;
+Model.getOrders=function(uid){
+  return Model.getUserByIdWithOrders(uid)
+  .then(function (userWOrders){
+    return userWOrders.orders;
+  })
   };
 
-  /*Model.getCurrentProfile = function (){
-    return Model.user;
-  }*/
+Model.getOrder = function (number, uid){
+  return this.getUserById(uid)
+  .then(function(user){
+    console.log(user)
+    return Order.findOne({ 'number': number, 'user':user._id})
+    .then(function (order){
+      return order;
+    })
+  })
+
+}
 
   Model.getUserById = function (userid) {
     //

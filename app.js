@@ -40,7 +40,8 @@ var app = express();
 
 app.use(express.urlencoded({ extended: true }));
 const { Console } = require('console');
-const { user } = require('./model/model');
+const { user, getOrders } = require('./model/model');
+const { REPL_MODE_STRICT } = require('repl');
 app.use(cookieParser());
 // Load logger module
 app.use(logger('dev'));
@@ -167,23 +168,24 @@ app.post('/api/orders',
     
     return model.purchase(date, address, cardNumber, cardOwner, uid)
     .then(function (order){
-      console.log(order)
+      
       return model.resetCart(uid)
       .then( function(user){
-        console.log(user)
+        
         return model.getUserByIdWithCart(uid)
         .then( function(user){
           user.orders.push(order)
+          console.log("limpio")
           return user.save()
+          .then(function (result) {
+            if (result) return res.json(order);
+            else return res.status(401).send({ message: 'User or Product not found' });
+          })
         })
       })
     }).catch(function (errors) { console.error(errors); return null; })
 
-    if (cart) { return res.json(cart); }
-    else {
-      return res.status(401).send(
-        { message: 'User or Product not found' });
-    }
+
   });
 
 
@@ -216,11 +218,18 @@ app.get('/api/profile', function (req, res, next) {
 });
 
 app.get('/api/orders/id/:oid', function (req, res, next) {
-
+  //obtener las orders del usuario; obtener la orden que coincida el number con el ID; delvolver esa order
   var oid = req.params.oid;
-  var order = model.getOrder(oid);
-  if (order) { return res.json(order); }
-  else return res.status(401).send({ message: 'Order  not found' });
+  console.log(oid)
+  return model.getOrder(oid, req.cookies.userid)
+  .then(function (order){
+    if (order) {
+      console.log(order)
+      return res.json(order);
+    }
+    else return res.status(401).send({ message: 'Order  not found' });
+  })
+
 });
 
 app.get(/\/.*/, function (req, res) {

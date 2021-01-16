@@ -5,7 +5,7 @@
     form.classList.add('was-validated');
     if (form.checkValidity()) {
       Model.purchase($('#date').val(), $('#address').val(), $('#cardNumber').val(), $('#cardOwner').val())
-      .done(function (result) { Messages.success.push(`Purchase Finished!`); navigateTo( "/order/id/" + result) })
+      .done(function (result) {console.log(result['number']); Messages.success.push(`Purchase Finished!`); navigateTo( "/order/id/" + result['number']) })
       .fail(function (error) { console.error(error); })
     } else {
       console.log('invalid');

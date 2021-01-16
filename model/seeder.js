@@ -131,11 +131,11 @@ var neworder = new Order({
 'total': 1209.9879,
 'subtotal': 999.99,
 'tax': 209.9979,
-'user_id': user,
+'user': user,
 'number': number,
 'date': '1998-03-31',
 'cardNumber': 1111222233334444,
-'cardOwner': "Albero",
+'cardOwner': "Alberto",
 });
 
 user.orders.push(neworder);

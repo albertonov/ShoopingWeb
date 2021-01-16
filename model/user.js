@@ -9,7 +9,7 @@ var schema = Schema({
   address: { type: String, required: true },
   birth: { type: Date, required: true },
   shoppingCart: { type: Schema.Types.ObjectId, ref: 'ShoppingCart' },
-  orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }]
+  orders: [{type: Schema.Types.ObjectId, ref: 'Order'}]
 });
 
 

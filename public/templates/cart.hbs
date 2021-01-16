@@ -2,17 +2,17 @@
     function removeOneItem_clicked(event, id) {
         event.preventDefault();
         Model.removeOne(id)
-            .always(
-                function (result) {
-                    Messages.success.push(`Item removed!`);
-                    navigateTo('/cart');
-                }
-            )
-            .catch(
-                function (result) {
-                    console.log(result);
-                }
-            )
+        .always(
+            function (result) {
+                Messages.success.push(`Item removed!`);
+                navigateTo('/cart');
+            }
+        )
+        .catch(
+            function (result) { 
+                console.log(result) ;
+            }
+        )
 
 
     };
@@ -20,17 +20,17 @@
     function removeAllItems_clicked(event, id) {
         event.preventDefault();
         Model.removeAllItems(id)
-            .always(
-                function (result) {
-                    Messages.success.push('All item class removed!')
-                    navigateTo('/cart');
-                }
-            )
-            .catch(
-                function (result) {
-                    console.log(result);
-                }
-            )
+        .always(
+            function (result) {
+                Messages.success.push('All item class removed!')
+                navigateTo('/cart');
+            }
+        )
+        .catch(
+            function (result) { 
+                console.log(result) ;
+            }
+        )
 
     };
 </script>

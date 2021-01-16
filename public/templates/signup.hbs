@@ -4,18 +4,18 @@
     var form = document.getElementById('signup-form');
     form.classList.add('was-validated');
     if (form.checkValidity()) {
-      if ($('#password').val() == $('#passwordconfirm').val()) {
+      if( $('#password').val() == $('#passwordconfirm').val() ){
         var result = Model.signup($('#name').val(), $('#surname').val(), $('#address').val(), $('#birth').val(), $('#email').val(), $('#password').val())
-          .done(function (user) {
-            Messages.success.push(`User registered ${user.name} ${user.surname}`)
-            navigateTo('/signin');
-          })
-          .fail(function (error) {
-            Messages.danger.push(`Email Invalid`);
-            navigateTo('/signup');
-          })
+      .done(function (user) {
+        Messages.success.push(`User registered ${user.name } ${user.surname}`)
+        navigateTo('/signin');
+      })
+      .fail(function (error) {
+        Messages.danger.push(`Email Invalid`);
+        navigateTo('/signup');
+      })
       }
-      else {
+      else{
         Messages.danger.push(`Passwords are not equals!`);
         navigateTo('/signup');
       }
@@ -27,62 +27,62 @@
 </script>
 
 {{> navBar this}}
-{{> header}}
+{{> header}}  
 {{> messages this}}
 
-<div class="container">
-  <div class="row justify-content-center">
-    <h1>Sign Up</h1>
-  </div>
-  <br>
-  <div>
-    <form id="signup-form">
-      <div class="alert alert-danger collapse" role="alert">
-        Password doesn't match!
-      </div>
-      <div class="form-group ">
-        <label for="name" class="sr-only">Name</label>
-        <input type="text" id="name" class="form-control" placeholder="Name" required="" autofocus="">
-        <div class="invalid-feedback">The Name field cannot be empty</div>
-      </div>
-      <div class="form-group">
-        <label for="surname" class="sr-only">Name</label>
-        <input type="text" id="surname" class="form-control" placeholder="Surname" required="" autofocus="">
-        <div class="invalid-feedback">The Surname field cannot be empty</div>
-      </div>
-      <div class="form-group ">
-        <label for="address" class="sr-only">Name</label>
-        <input type="text" id="address" class="form-control" placeholder="Address" required="" autofocus="">
-        <div class="invalid-feedback">The Address field cannot be empty</div>
-      </div>
+      <div class="container">
+        <div class="row justify-content-center" >
+            <h1>Sign Up</h1>
+        </div>
+        <br>
+        <div >
+          <form id="signup-form">
+            <div class="alert alert-danger collapse" role="alert">
+              Password doesn't match!
+            </div>
+            <div class="form-group ">
+                    <label for="name" class="sr-only">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Name" required="" autofocus="">
+                    <div class="invalid-feedback">The Name field cannot be empty</div>
+            </div>
+            <div class="form-group">
+                    <label for="surname" class="sr-only">Name</label>
+                    <input type="text" id="surname" class="form-control" placeholder="Surname" required="" autofocus="">
+                    <div class="invalid-feedback">The Surname field cannot be empty</div>
+            </div>
+            <div class="form-group ">
+                    <label for="address" class="sr-only">Name</label>
+                    <input type="text" id="address" class="form-control" placeholder="Address" required="" autofocus="">
+                    <div class="invalid-feedback">The Address field cannot be empty</div>
+              </div>
 
-      <div class="form-group">
-        <label for="date" class="sr-only">Date</label>
-        <input type="date" id="birth" class="form-control" placeholder="Date" required="" autofocus="">
-        <div class="invalid-feedback">The Date field cannot be empty</div>
-      </div>
-      <div class="form-group">
-        <label for="email" class="sr-only">Email address</label>
-        <input type="email" id="email" class="form-control" placeholder="Email address" required="" autofocus="">
-        <div class="invalid-feedback">The email field cannot be empty</div>
-      </div>
-      <div class="form-group">
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" class="form-control" placeholder="Password" required="">
-        <div class="invalid-feedback">The password field cannot be empty</div>
-      </div>
-      <div class="form-group">
-        <label for="passwordconfirm" class="sr-only">Confirm Password Password</label>
-        <input type="password" id="passwordconfirm" class="form-control" placeholder="Password" required="">
-        <div class="invalid-feedback">The password confirm field cannot be empty</div>
-      </div>
+                <div class="form-group">
+                    <label for="date" class="sr-only">Date</label>
+                    <input type="date" id="birth" class="form-control" placeholder="Date" required="" autofocus="">
+                    <div class="invalid-feedback">The Date field cannot be empty</div>
+                </div>
+            <div class="form-group">
+                <label for="email" class="sr-only">Email address</label>
+                <input type="email" id="email" class="form-control" placeholder="Email address" required="" autofocus="">
+                <div class="invalid-feedback">The email field cannot be empty</div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Password" required="">
+                <div class="invalid-feedback">The password field cannot be empty</div>
+            </div>
+            <div class="form-group">
+                <label for="passwordconfirm" class="sr-only">Confirm Password Password</label>
+                <input type="password" id="passwordconfirm" class="form-control" placeholder="Password" required="">
+                <div class="invalid-feedback">The password confirm field cannot be empty</div>
+            </div>
+            
+            <div class="row justify-content-end "  style="margin-right: 0%;">
+                <a class="btn btn-primary" href="/index" onclick="signup_clicked(event)" role="button">Sign up</a>
+            </div>
 
-      <div class="row justify-content-end " style="margin-right: 0%;">
-        <a class="btn btn-primary" href="/index" onclick="signup_clicked(event)" role="button">Sign up</a>
+          </form>
+        </div>
       </div>
-
-    </form>
-  </div>
-</div>
-<br><br><br><br>
+      <br><br><br><br>
 {{> footer}}

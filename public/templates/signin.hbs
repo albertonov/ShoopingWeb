@@ -1,50 +1,50 @@
 <script>
-  function signin_clicked(event) {
-
-    event.preventDefault();
-    var form = document.getElementById('signin-form');
-    form.classList.add('was-validated');
-    if (form.checkValidity()) {
-
-      Model.signin($('#email').val(), $('#password').val())
-        .done(function (user) {
-          Model.user = user;
-          Messages.success.push(`Welcome ${user.name} ${user.surname}`)
-          navigateTo(event.target.href);
-        })
-        .fail(function (error) {
-          Messages.danger.push(`${error.responseJSON.message}`);
-          navigateTo('/signin');
-        })
-    } else {
-      console.log('invalid');
-    }
+function signin_clicked(event) {
+  
+  event.preventDefault();
+  var form = document.getElementById('signin-form');
+  form.classList.add('was-validated');
+  if (form.checkValidity()) {
+    
+    Model.signin($('#email').val(), $('#password').val())
+      .done(function (user) {
+        Model.user = user;
+        Messages.success.push(`Welcome ${user.name } ${user.surname}`)
+        navigateTo(event.target.href);
+      })
+      .fail(function (error) {
+        Messages.danger.push(`${error.responseJSON.message}`);
+        navigateTo('/signin');
+      })
+  } else {
+    console.log('invalid');
   }
+}
 </script>
 
 {{> navBar this}}
-{{> header}}
+{{> header}}  
 {{> messages this}}
 <div class="container">
-  <div class="row justify-content-center">
-    <h1>Sign In</h1>
-  </div>
-  <form id="signin-form" class="w-75 mx-auto needs-validation" novalidate>
-    <div class="form-group">
-      <label for="email" class="sr-only">Email address</label>
-      <input type="email" id="email" class="form-control" placeholder="Email address" required="" autofocus=""
-        value="alberto@gmail.com">
-      <div class="invalid-feedback">The email field cannot be empty</div>
+    <div class="row justify-content-center" >
+        <h1>Sign In</h1>
     </div>
-    <div class="form-group">
-      <label for="password" class="sr-only">Password</label>
-      <input type="password" id="password" class="form-control" placeholder="Password" required="" value="admin">
-      <div class="invalid-feedback">The password field cannot be empty</div>
-    </div>
-    <div class="d-flex justify-content-end">
-      <a class="btn btn-primary" href="/index" onclick="signin_clicked(event)" role="button">Sign in</a>
-    </div>
-  </form>
+        <form id="signin-form" class="w-75 mx-auto needs-validation" novalidate>
+        <div class="form-group">
+            <label for="email" class="sr-only">Email address</label>
+            <input type="email" id="email" class="form-control" placeholder="Email address" required="" autofocus=""
+            value="alberto@gmail.com">
+            <div class="invalid-feedback">The email field cannot be empty</div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Password" required="" value="admin">
+            <div class="invalid-feedback">The password field cannot be empty</div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-primary" href="/index" onclick="signin_clicked(event)" role="button">Sign in</a>
+        </div>
+        </form>
 </div>
 <br><br>
 {{> footer}}

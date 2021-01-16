@@ -7,7 +7,7 @@ var schema = Schema({
 
   number: { type: Number },
   date: { type: Date },
-  address: { type: String },
+  address: { type: String},
   cardNumber: { type: Number },
   cardOwner: { type: String },
   user: { type: Schema.Types.ObjectId, ref: 'User' },

@@ -1,36 +1,33 @@
+
+
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-  <a class="navbar-brand" href="/index" onclick="navigateTo(event.target.href)">EasyPCy</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+        <a class="navbar-brand" href="/index" onclick="navigateTo(event.target.href)">EasyPCy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+          aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
   <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
     <ul class="navbar-nav">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="dropdown01" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">Cart&nbsp;{{#if user}}<span
-            class="badge badge-dark">{{user.shoppingCart.qty}}</span>{{/if}}</a>
+          aria-haspopup="true" aria-expanded="false">Cart&nbsp;{{#if user}}<span class="badge badge-dark">{{user.shoppingCart.qty}}</span>{{/if}}</a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/cart"
-            onclick="navigateTo(event.target.href)">Cart</a>
-          <a class="dropdown-item {{#unless user}}disabled{{/unless}} " href="/purchase"
-            onclick="navigateTo(event.target.href)">Purchase</a>
+          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/cart" onclick="navigateTo(event.target.href)">Cart</a>
+          <a class="dropdown-item {{#unless user}}disabled{{/unless}} " href="/purchase" onclick="navigateTo(event.target.href)">Purchase</a>
         </div>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="dropdown01" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">User</a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-          <a class="dropdown-item {{#if user}}disabled{{/if}}" href="/signup"
-            onclick="navigateTo(event.target.href)">Sign Up</a>
-          <a class="dropdown-item {{#if user}}disabled{{/if}}" href="/signin"
-            onclick="navigateTo(event.target.href)">Sign In</a>
-          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/profile"
-            onclick="navigateTo(event.target.href)">Profile</a>
-          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/index"
-            onclick="signout(event.target.href)">Sign Out</a>
-        </div>
-      </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="dropdown01" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">User</a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+          <a class="dropdown-item {{#if user}}disabled{{/if}}" href="/signup" onclick="navigateTo(event.target.href)">Sign Up</a>
+          <a class="dropdown-item {{#if user}}disabled{{/if}}" href="/signin" onclick="navigateTo(event.target.href)">Sign In</a>
+          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/profile" onclick="navigateTo(event.target.href)">Profile</a>
+          <a class="dropdown-item {{#unless user}}disabled{{/unless}}" href="/index" onclick="signout(event.target.href)">Sign Out</a>
+              </div>
+            </li>
     </ul>
   </div>
 </nav>
+
+

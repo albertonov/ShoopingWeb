@@ -1,86 +1,86 @@
-
 {{> navBar this}}
-{{> header}}     
-{{> messages this}}    
-        <div class="container">
+{{> header}}
+{{> messages this}}
+<div class="container">
 
-            
-            <div class="row justify-content-center" >
-                <div class="col-md-9">
-                    <div class="col-md-9">
-                        <h1>Profile</h1>
-                    </div>   
-                </div>
-            </div>
-            
-            <div class="row justify-content-center">
-                <div class="col-md-9">
-                    <div class="col-md-9">
-                        <label for="Name"><b>Name:</b> {{user.name}}</label>
-                    </div>
-                    <div class="col-md-9">
-                        <label for="Surname"><b>Surname:</b> {{user.surname}}</label>
-                    </div>
-                    <div class="col-md-9">
-                        <label for="Birth"><b>Birth:</b> {{ user.birth}} </label>
-                    </div>
-                    <div class="col-md-9">
-                        <label for="Address"><b>Address:</b> {{user.address}} </label>
-                    </div>
-                    <div class="col-md-9">
-                        <label for="Email"><b>Email:</b> {{user.email}} </label>
-                    </div>
-                </div>
-            </div>
-            
-            {{#if (hasNotOrders user)}}
-            <h4 class="card-name row justify-content-center">No orders founded</h4> <br><br>
-            {{else}} 
 
-            <div class="row justify-content-center">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
             <div class="col-md-9">
-                <div class="col-md-9">
-                        <h2>Order List</h2>
-                </div>   
+                <h1>Profile</h1>
             </div>
-            <br>
-             
-
-
-            
-            <div class="table-responsive col-md-9">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Number</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Total</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each user.orders}}
-                        <tr>    
-                            <td>{{this.number}}</td>
-                            <td>{{this.date}}</td>
-                            <td>{{this.total}}</td>
-                            <td class=" d-flex justify-content-end"> 
-                                <button type="button" onclick="navigateTo('/order/id/{{this.number}}')" class="btn btn-primary">Details</button>
-                            </td>
-                        </tr>
-                        {{/each}}
-                        </tbody>
-                    </table>
-                </div>
-            
-            {{/if}}        
-
         </div>
-        
-            
-        <br><br><br><br><br><br>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="col-md-9">
+                <label for="Name"><b>Name:</b> {{user.name}}</label>
+            </div>
+            <div class="col-md-9">
+                <label for="Surname"><b>Surname:</b> {{user.surname}}</label>
+            </div>
+            <div class="col-md-9">
+                <label for="Birth"><b>Birth:</b> {{ user.birth}} </label>
+            </div>
+            <div class="col-md-9">
+                <label for="Address"><b>Address:</b> {{user.address}} </label>
+            </div>
+            <div class="col-md-9">
+                <label for="Email"><b>Email:</b> {{user.email}} </label>
+            </div>
+        </div>
+    </div>
+
+    {{#if (hasNotOrders user)}}
+    <h4 class="card-name row justify-content-center">No orders founded</h4> <br><br>
+    {{else}}
+
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="col-md-9">
+                <h2>Order List</h2>
+            </div>
+        </div>
+        <br>
 
 
-        
 
-        {{> footer}}
+
+        <div class="table-responsive col-md-9">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Number</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Total</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each user.orders}}
+                    <tr>
+                        <td>{{this.number}}</td>
+                        <td>{{this.date}}</td>
+                        <td>{{this.total}}</td>
+                        <td class=" d-flex justify-content-end">
+                            <button type="button" onclick="navigateTo('/order/id/{{this.number}}')"
+                                class="btn btn-primary">Details</button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+        {{/if}}
+
+    </div>
+
+
+    <br><br><br><br><br><br>
+
+
+
+
+    {{> footer}}

@@ -2,79 +2,79 @@
 <br><br><br><br>
 {{> messages this}}
 <br><br>
-    <div class="container">
-        <div class="row justify-content-center">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
             <div class="col-md-9">
-                <div class="col-md-9">
-                    <h1>Order</h1>
-                </div>
-                        <div class="col-md-9">
-                            <label for="Date"><b>Date:</b> {{order.date}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="Addres"><b>Address:</b> {{order.address}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="CardNumber"><b>CardNumber:</b> {{order.cardNumber}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="CardOwner"><b>CardOwner:</b> {{order.cardOwner}}</label>
-                        </div>
+                <h1>Order</h1>
             </div>
-        </div>
-
-        <div class="row justify-content-center">
             <div class="col-md-9">
-                <hr>
+                <label for="Date"><b>Date:</b> {{order.date}}</label>
             </div>
-            
-        </div>
-
-        <div class="row justify-content-center" >
-            <div class=" col-md-9">
-                <div class="col-md-9">
-                    <h1>Products</h1>
-                </div>   
+            <div class="col-md-9">
+                <label for="Addres"><b>Address:</b> {{order.address}}</label>
             </div>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="table-responsive col-md-9">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Product</th>
-                            <th class=" d-flex justify-content-end" scope="col">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each order.items}}
-                        <tr>    
-                            <td >{{this.qty}}</td>
-                            <td>{{this.title}}</td>
-                            <td class=" d-flex justify-content-end">{{formatPrice (multiplicate this.qty this.price)}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+            <div class="col-md-9">
+                <label for="CardNumber"><b>CardNumber:</b> {{order.cardNumber}}</label>
+            </div>
+            <div class="col-md-9">
+                <label for="CardOwner"><b>CardOwner:</b> {{order.cardOwner}}</label>
             </div>
         </div>
+    </div>
 
-              <div class="row justify-content-center">
-                    <div class="col-md-9">
-                        <div class="col-md-9">
-                            <label for="SubTotal"><b>SubTotal:</b> {{formatPrice order.subtotal}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="Taxes"><b>Taxes:</b> {{formatPrice order.tax}}</label>
-                        </div>
-                        <div class="col-md-9">
-                            <label for="Total"><b>Total:</b> {{formatPrice order.total}}</label>
-                        </div>
-                    </div>
-                </div>
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <hr>
+        </div>
 
-            <br><br><br><br>
-    </div>      
+    </div>
+
+    <div class="row justify-content-center">
+        <div class=" col-md-9">
+            <div class="col-md-9">
+                <h1>Products</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="table-responsive col-md-9">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product</th>
+                        <th class=" d-flex justify-content-end" scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each order.items}}
+                    <tr>
+                        <td>{{this.qty}}</td>
+                        <td>{{this.title}}</td>
+                        <td class=" d-flex justify-content-end">{{formatPrice (multiplicate this.qty this.price)}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="col-md-9">
+                <label for="SubTotal"><b>SubTotal:</b> {{formatPrice order.subtotal}}</label>
+            </div>
+            <div class="col-md-9">
+                <label for="Taxes"><b>Taxes:</b> {{formatPrice order.tax}}</label>
+            </div>
+            <div class="col-md-9">
+                <label for="Total"><b>Total:</b> {{formatPrice order.total}}</label>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br>
+</div>
 {{> footer}}

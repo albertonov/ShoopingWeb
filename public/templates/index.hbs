@@ -1,56 +1,56 @@
 <script>
-function buy_clicked(event, _id) {
-  console.log(_id)
-  event.preventDefault();
-  Model.buy(_id)
-    .done(function () {
-      Messages.success.push(`Added!`)
-      navigateTo(event.target.href)
-    })
-    .fail(function(){
-          console.error('buy error', error.status, error.statusText, error.responseJSON.message);
-    })
-}
+  function buy_clicked(event, _id) {
+    console.log(_id)
+    event.preventDefault();
+    Model.buy(_id)
+      .done(function () {
+        Messages.success.push(`Added!`)
+        navigateTo(event.target.href)
+      })
+      .fail(function () {
+        console.error('buy error', error.status, error.statusText, error.responseJSON.message);
+      })
+  }
 </script>
 
 {{> navBar this}}
 {{> header}}
 {{> messages this}}
-    <main>
-      <div class="container">
-        <div class="card-group">
-          <div class="row justify-content-around">
-            {{#each this.products}}
-            <div class="col-xl-3 col-lg-4 col-md-6 col-12">
-              <div class="card h-100" style="width: 0 auto;">
-                  <div class="card">
-                  <img src="{{this.url}}" class="card-img-top" alt="{{title}} cover">
-                  <div class="card-body">
-                      <h5 class="card-title">{{title}}</h5>
-                      <p class="card-text">{{description}}</p>
-                        <ul class="list-group list-group-flush">
-                          <li class="list-group-item">{{tam}}</li>
-                          <li class="list-group-item">{{procesador}}</li>
-                          <li class="list-group-item">{{ram}}</li>
-                          <li class="list-group-item">{{disco}}</li>
-                        </ul>
-                        <span class="align-bottom">
-                        <div class="d-flex justify-content-around">
-                          <span class="align-middle"><p class="card-text"><b>{{formatPrice this.price}}</b></p></span>
-                          <a href="/index" onclick="buy_clicked(event,'{{_id}}')" class="btn btn-success  {{#unless ../user}}disabled{{/unless}}">Buy!</a>                     
-                        </div>
-
-                        </span>
-
-
+<main>
+  <div class="container">
+    <div class="card-group">
+      <div class="row justify-content-around">
+        {{#each this.products}}
+        <div class="col-xl-3 col-lg-4 col-md-6 col-12">
+          <div class="card h-100" style="width: 0 auto;">
+            <div class="card">
+              <img src="{{this.url}}" class="card-img-top" alt="{{title}} cover">
+              <div class="card-body">
+                <h5 class="card-title">{{title}}</h5>
+                <p class="card-text">{{description}}</p>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">{{tam}}</li>
+                  <li class="list-group-item">{{procesador}}</li>
+                  <li class="list-group-item">{{ram}}</li>
+                  <li class="list-group-item">{{disco}}</li>
+                </ul>
+                <span class="align-bottom">
+                  <div class="d-flex justify-content-around">
+                    <span class="align-middle">
+                      <p class="card-text"><b>{{formatPrice this.price}}</b></p>
+                    </span>
+                    <a href="/index" onclick="buy_clicked(event,'{{_id}}')"
+                      class="btn btn-success  {{#unless ../user}}disabled{{/unless}}">Buy!</a>
                   </div>
-                  </div>
-                </div>
-            </div> 
-            {{/each}}
+                </span>
+              </div>
+            </div>
           </div>
-        </div> 
+        </div>
+        {{/each}}
       </div>
-      <br><br>
-    </main>
+    </div>
+  </div>
+  <br><br>
+</main>
 {{> footer}}

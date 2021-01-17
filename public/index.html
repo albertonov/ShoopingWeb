@@ -12,10 +12,10 @@
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
   <title>EasyPCy</title>
-  
+
   <link rel="icon" type="image/png" href="./images/ico16.png" sizes="16x16">
-  <script src ="./model.js">    </script>
-  <script src ="/messages.js">  </script>
+  <script src="./model.js">    </script>
+  <script src="/messages.js">  </script>
 
 </head>
 
@@ -28,8 +28,8 @@
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"
     integrity="sha512-zT3zHcFYbQwjHdKjCu6OMmETx8fJA9S7E6W7kBeFxultf75OPTYUJigEKX58qgyQMi1m1EgenfjMXlRZG8BXaw=="
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
@@ -40,15 +40,15 @@
     crossorigin="anonymous"></script>
 
 
-    <script>
+  <script>
 
 
 
-      function render(url, container, context) {
-        return $.ajax({
-          url: url,
-          method: 'GET'
-        })
+    function render(url, container, context) {
+      return $.ajax({
+        url: url,
+        method: 'GET'
+      })
         .done(function (source) {
           var template = Handlebars.compile(source);
           var html = template(context);
@@ -57,185 +57,195 @@
         .fail(function (error) {
           console.error('GET ', url, error)
         }) // http GET Error
-      }
-      function navigateTo(url) {
-        event.preventDefault();
-        history.pushState(null, '', url);
-        route(url)        
-      }
-    
-    
+    }
+    function navigateTo(url) {
+      event.preventDefault();
+      history.pushState(null, '', url);
+      route(url)
+    }
+
+
     function route() {
       var path = location.pathname;
-      var matching = null;  
-      console.log('Routing ', path);  
-      
+      var matching = null;
+      console.log('Routing ', path);
+
       var context = {}
       context.messages = { success: Messages.success, danger: Messages.danger };
       Messages.clear();
 
       var p = Model.getUserCartQty()
-      .done(function (userCartQty) {  context.user = userCartQty; })
-      .fail(function (error) { console.error(error); })
-      
+        .done(function (userCartQty) { context.user = userCartQty; })
+        .fail(function (error) { console.error(error); })
+
       if (matching = path.match(/^\/index$/)) {
-          return Model.getProducts()
-            .done(function (result) { context.products = result; })
-            .fail(function (error) { console.error(error); })
-            .always(function () {
-              return p.always(function () { return render('/templates/index.hbs', '#contents', context); })});  }
+        return Model.getProducts()
+          .done(function (result) { context.products = result; })
+          .fail(function (error) { console.error(error); })
+          .always(function () {
+            return p.always(function () { return render('/templates/index.hbs', '#contents', context); })
+          });
+      }
       else if (matching = path.match(/^\/$/)) {
-          return Model.getProducts()
-            .done(function (result) { context.products = result; })
-            .fail(function (error) { console.error(error); })
-            .always(function () {
-              return p.always(function () { return render('/templates/index.hbs', '#contents', context); })});  }
-      else if (matching = path.match(/^\/cart$/)){
+        return Model.getProducts()
+          .done(function (result) { context.products = result; })
+          .fail(function (error) { console.error(error); })
+          .always(function () {
+            return p.always(function () { return render('/templates/index.hbs', '#contents', context); })
+          });
+      }
+      else if (matching = path.match(/^\/cart$/)) {
         return Model.getCart()
-            .done(function (result) { context.user.shoppingCart = result; })
-            .fail(function (error) { console.error(error); })
-            .always(function () {
+          .done(function (result) { context.user.shoppingCart = result; })
+          .fail(function (error) { console.error(error); })
+          .always(function () {
             return p.always(function () {
-            render('/templates/cart.hbs', '#contents', context); })
-            });
+              render('/templates/cart.hbs', '#contents', context);
+            })
+          });
       }
       else if (matching = path.match(/^\/profile$/))
-            return Model.getProfile()
-            .done(function (result) { context.user = result; 
-            console.log(context.user)})
-            .fail(function (error) { console.error(error); })
+        return Model.getProfile()
+          .done(function (result) {
+            context.user = result;
+            console.log(context.user)
+          })
+          .fail(function (error) { console.error(error); })
 
-            .always(function () {
+          .always(function () {
             return p.always(function () {
-            render('/templates/profile.hbs', '#contents', context); })
-            });
+              render('/templates/profile.hbs', '#contents', context);
+            })
+          });
 
-    
-          else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
-            console.log("Matching: "+ matching[1])
-            var de = matching[1];
-            Model.getOrder(de)
-            .done(function (result) { context.order = result; })
-            .fail(function (error) { console.error(error); })
-            .always(function () {
+
+      else if (matching = path.match(/^\/order\/id\/(\d*)$/)) {
+        console.log("Matching: " + matching[1])
+        var de = matching[1];
+        Model.getOrder(de)
+          .done(function (result) { context.order = result; })
+          .fail(function (error) { console.error(error); })
+          .always(function () {
             return p.always(function () {
-            render('/templates/order.hbs', '#contents', context); })
-            }); 
-            
+              render('/templates/order.hbs', '#contents', context);
+            })
+          });
 
-           // if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
-            //else return p.always(function () { render('/templates/not-found.hbs', '#contents', context); });}  
-          }
 
-          else if (matching = path.match(/^\/purchase$/)){
-            return Model.getCart()
-            .done(function (result) { context.user.shoppingCart = result; })
-            .fail(function (error) { console.error(error); })
+        // if (order) return p.always(function () { render('/templates/order.hbs', '#contents', context); });
+        //else return p.always(function () { render('/templates/not-found.hbs', '#contents', context); });}  
+      }
 
-            .always(function () {
-              console.log(context.user)
+      else if (matching = path.match(/^\/purchase$/)) {
+        return Model.getCart()
+          .done(function (result) { context.user.shoppingCart = result; })
+          .fail(function (error) { console.error(error); })
+
+          .always(function () {
+            console.log(context.user)
             return p.always(function () {
-            render('/templates/purchase.hbs', '#contents', context); })
-            });
+              render('/templates/purchase.hbs', '#contents', context);
+            })
+          });
 
-          }
+      }
 
 
 
-          else if (matching = path.match(/^\/signin$/))
-            return p.always(function () { render('/templates/signin.hbs', '#contents', context); })
-          else if (matching = path.match(/^\/signup$/))
-            return p.always(function () { render('/templates/signup.hbs', '#contents', context); })
-          else {
-            return p.always(function () { render('/templates/notFound.hbs', '#contents', context); })
-          }
+      else if (matching = path.match(/^\/signin$/))
+        return p.always(function () { render('/templates/signin.hbs', '#contents', context); })
+      else if (matching = path.match(/^\/signup$/))
+        return p.always(function () { render('/templates/signup.hbs', '#contents', context); })
+      else {
+        return p.always(function () { render('/templates/notFound.hbs', '#contents', context); })
+      }
     }
-    
-    
-    
+
+
+
     function loadPartial(partial, url) {
-    var url = url;
-    return $.ajax({
-      url: url,
-      method: 'GET'
-    })
-      .done(function (source) {
-        Handlebars.registerPartial(partial, source);
+      var url = url;
+      return $.ajax({
+        url: url,
+        method: 'GET'
       })
-      .fail(function (error) {
-        console.error('GET ', url, error)
-      }) // http GET Error
+        .done(function (source) {
+          Handlebars.registerPartial(partial, source);
+        })
+        .fail(function (error) {
+          console.error('GET ', url, error)
+        }) // http GET Error
     }
-    
+
     $(function () {
       $.when(loadPartial('navBar', '/partials/nav-bar.hbs'),
         loadPartial('footer', '/partials/footer.hbs'),
         loadPartial('header', '/partials/header.hbs')),
         loadPartial('messages', '/partials/messages.hbs')
-        .done(function () {
-          route()
-        })
+          .done(function () {
+            route()
+          })
       window.addEventListener('popstate', (event) => route(), false);
     }) 
-    </script>
+  </script>
 
-    <script>
-      Handlebars.registerHelper('formatPrice', function (price) {
-        return (Math.round(price * 100) / 100).toFixed(2)+'€';
-      });
-    </script>
+  <script>
+    Handlebars.registerHelper('formatPrice', function (price) {
+      return (Math.round(price * 100) / 100).toFixed(2) + '€';
+    });
+  </script>
 
-    <script>
-      Handlebars.registerHelper('cardGrid', function (array, options) {
-        var out = '<div class="row">';
-        for (var i = 0; i < array.length; i++) {
-          out = out + '<div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-3">' + options.fn(array[i]) + '</div>';
-        }
-        out = out + '</div>'
-        return out;
-      });
-    </script>
+  <script>
+    Handlebars.registerHelper('cardGrid', function (array, options) {
+      var out = '<div class="row">';
+      for (var i = 0; i < array.length; i++) {
+        out = out + '<div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-3">' + options.fn(array[i]) + '</div>';
+      }
+      out = out + '</div>'
+      return out;
+    });
+  </script>
 
-    <script>
-        Handlebars.registerHelper('hasNotOrders', function (user) {
-          
-        return user.orders.length == 0;
-        });
-    </script>
-    <script>
-          Handlebars.registerHelper('hasNotCartItems', function (user) {
-          return user.shoppingCart.qty == 0;
-          });
-    </script>
-    <script>
-        Handlebars.registerHelper("multiplicate", function(thing1, thing2) {
-          return thing1 * thing2;
-        });
-    </script>
-    <script>
-        Handlebars.registerHelper('formatDate', function(dateString) {
-            return  dateString.format("MDY");
-        });
-    </script>
-    <script>
-          Handlebars.registerHelper("getTotalCart", function(items) {
-            var total=0;
-            
-            for (i=0; i<items.length; i++){
-              total = total + (items[i].price * items[i].qtyItem);
-            }
-            //console.log(items)
-            return total * 0.21 + total;
-          });
-    </script>
+  <script>
+    Handlebars.registerHelper('hasNotOrders', function (user) {
 
-<script>
-  function signout(url) {
-     event.preventDefault();
-     Model.signout();
-     navigateTo(event.target.href); 
-     }
-</script>
+      return user.orders.length == 0;
+    });
+  </script>
+  <script>
+    Handlebars.registerHelper('hasNotCartItems', function (user) {
+      return user.shoppingCart.qty == 0;
+    });
+  </script>
+  <script>
+    Handlebars.registerHelper("multiplicate", function (thing1, thing2) {
+      return thing1 * thing2;
+    });
+  </script>
+  <script>
+    Handlebars.registerHelper('formatDate', function (dateString) {
+      return dateString.format("MDY");
+    });
+  </script>
+  <script>
+    Handlebars.registerHelper("getTotalCart", function (items) {
+      var total = 0;
+
+      for (i = 0; i < items.length; i++) {
+        total = total + (items[i].price * items[i].qtyItem);
+      }
+      //console.log(items)
+      return total * 0.21 + total;
+    });
+  </script>
+
+  <script>
+    function signout(url) {
+      event.preventDefault();
+      Model.signout();
+      navigateTo(event.target.href);
+    }
+  </script>
 
 
 </body>

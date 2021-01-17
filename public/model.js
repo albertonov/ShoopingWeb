@@ -20,25 +20,34 @@ Model.signup = function (name, surname, address, birth, email, password) {
   return result;
 }
 
-Model.getUserId = function () {
+Model.getToken = function () {
   var decoded = decodeURIComponent(document.cookie);
-  return decoded.substring(7, decoded.length);
+  return decoded.substring(6, decoded.length);
 }
 
+
 Model.signout = function () {
-  document.cookie = 'userid=;expires=0;path=/;'
+  document.cookie = 'token=;expires=0;path=/;'
 }
 
 Model.getUserCartQty = function () {
-  return $.ajax({ url: '/api/cart/qty', method: 'GET' })
+  return $.ajax({
+    url: '/api/cart/qty', method: 'GET', beforeSend: function (xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+    }
+  })
 }
 
 Model.buy = function (pid) {
-  return $.ajax({ url: '/api/cart/items/product/' + pid, method: 'POST' })
+  return $.ajax({ url: '/api/cart/items/product/' + pid, method: 'POST', beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  } })
 }
 
 Model.getCart = function () {
-  return $.ajax({ url: '/api/cart', method: 'GET' })
+  return $.ajax({ url: '/api/cart', method: 'GET' , beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  }})
 }
 
 Model.getOrders = function () {

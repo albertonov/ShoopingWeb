@@ -51,18 +51,29 @@ Model.getCart = function () {
 }
 
 Model.getOrders = function () {
-  return $.ajax({ url: '/api/orders', method: 'GET' })
+  return $.ajax({ url: '/api/orders', method: 'GET' , 
+  beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  }})
 }
 
 Model.getProfile = function () {
-  return $.ajax({ url: '/api/profile', method: 'GET' })
-}
-Model.removeOne = function (pid) {
-  return $.ajax({ url: '/api/cart/items/product/' + pid + '/one', method: 'DELETE' })
+  return $.ajax({ url: '/api/profile', method: 'GET' , beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  }})
 }
 
+Model.removeOne = function (pid) {
+  return $.ajax({ url: '/api/cart/items/product/' + pid + '/one', method: 'DELETE', beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  } })
+}
+
+
 Model.removeAllItems = function (pid) {
-  return $.ajax({ url: '/api/cart/items/product/' + pid + '/all', method: 'DELETE' })
+  return $.ajax({ url: '/api/cart/items/product/' + pid + '/all', method: 'DELETE' , beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  }})
 }
 
 
@@ -71,7 +82,10 @@ Model.purchase = function (date, address, cardNumber, cardOwner) {
   result = $.ajax({
     url: '/api/orders',
     method: 'POST',
-    data: { date, address, cardNumber, cardOwner }
+    data: { date, address, cardNumber, cardOwner }, 
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+    }
   });
   return result;
 }
@@ -79,6 +93,9 @@ Model.purchase = function (date, address, cardNumber, cardOwner) {
 Model.getOrder = function (oid) {
 
   var url = '/api/orders/id/' + oid
-  result = $.ajax({ url: url, method: 'GET' })
+  result = $.ajax({ url: url, method: 'GET', 
+  beforeSend: function (xhr) {
+    xhr.setRequestHeader('Authorization', 'Bearer ' + Model.getToken());
+  }})
   return result;
 }

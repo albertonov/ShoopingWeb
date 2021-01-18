@@ -2,6 +2,7 @@ var User = require('./user');
 var Cart = require('./shopping-cart')
 var Product = require('./product');
 var Order = require('./order');
+var bcryptjs = require('bcryptjs');
 var Model = {}
 Model.order = [{}];
 Model.user = null;
@@ -20,6 +21,7 @@ Model.signup = function (name, surname, address, birth, email, password) {
   return User.findOne({ email })
     .then(function (user) {
       if (!user) {
+        password = bcryptjs.hashSync(password, bcryptjs.genSaltSync(10));
         var cart = new Cart({ items: [], qty: 0, total: 0, subtotal: 0, tax: 0 });
         var user = new User({ email, password, name, surname, birth, address, shoppingCart: cart });
         return cart.save().then(function () { return user.save(); })

@@ -118,7 +118,7 @@ app.post('/api/users/signin', function (req, res, next) {
 
 function useridFromToken(req, res) {
   if (req.user) {
-    res.cookie('token', jwt.sign({ id: req.user._id }, secretKey, { expiresIn: 20 }));
+    res.cookie('token', jwt.sign({ id: req.user._id }, secretKey, { expiresIn: 60 }));
     return req.user._id;
   } else {
     res.cookie.removeOne('token');
@@ -138,7 +138,7 @@ app.post('/api/users/signup', function (req, res, next) {
 
 app.get('/api/cart', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 
-  var uid = useridFromToken(req, res);;
+  var uid = useridFromToken(req, res);
   return model.getCartByUserId(uid)
     .then(function (cart) {
       if (cart) { return res.json(cart); }
@@ -147,11 +147,11 @@ app.get('/api/cart', passport.authenticate('jwt', { session: false }), function 
 
 });
 
-app.delete('/api/cart/items/product/:id/one',
+app.delete('/api/cart/items/product/:id/one', passport.authenticate('jwt', { session: false }),
   function (req, res, next) {
 
     var pid = req.params.id;
-    var uid = req.cookies.userid;
+    var uid = useridFromToken(req, res);
     return model.removeOne(uid, pid)
       .then(function (result) {
         if (result) { return res.json(result); }
@@ -161,11 +161,11 @@ app.delete('/api/cart/items/product/:id/one',
 
   });
 
-app.delete('/api/cart/items/product/:id/all',
+app.delete('/api/cart/items/product/:id/all',passport.authenticate('jwt', { session: false }),
   function (req, res, next) {
 
     var pid = req.params.id;
-    var uid = req.cookies.userid;
+    var uid = useridFromToken(req, res);
 
     return model.removeAll(uid, pid)
       .then(function (result) {
@@ -204,14 +204,14 @@ app.post('/api/cart/items/product/:id', passport.authenticate('jwt', { session: 
     })
 });
 
-app.post('/api/orders',
+app.post('/api/orders', passport.authenticate('jwt', { session: false }),
   function (req, res, next) {
 
     var date = req.body.date;
     var address = req.body.address;
     var cardNumber = req.body.cardNumber;
     var cardOwner = req.body.cardOwner;
-    var uid = req.cookies.userid;
+    var uid =  useridFromToken(req, res);
 
     return model.purchase(date, address, cardNumber, cardOwner, uid)
       .then(function (order) {
@@ -246,17 +246,17 @@ app.post('/api/orders',
 
 
 
-app.get('/api/orders', function (req, res, next) {
+app.get('/api/orders', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 
-  var uid = req.cookies.userid;
+  var uid = useridFromToken(req, res);
   var orders = model.getOrdersByUserId(uid);
   if (orders) { return res.json(orders); }
   else return res.status(401).send({ message: 'User orders not found' });
 });
 
 
-app.get('/api/profile', function (req, res, next) {
-  return model.getUserByIdWithOrders(req.cookies.userid)
+app.get('/api/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+  return model.getUserByIdWithOrders(useridFromToken(req, res))
     .then(function (profile) {
       if (profile) { console.log(profile); return res.json(profile); }
       else return res.status(401).send({ message: 'User  not found' });
@@ -264,10 +264,10 @@ app.get('/api/profile', function (req, res, next) {
 
 });
 
-app.get('/api/orders/id/:oid', function (req, res, next) {
+app.get('/api/orders/id/:oid', passport.authenticate('jwt', { session: false }), function (req, res, next) {
   var oid = req.params.oid;
-  console.log(oid)
-  return model.getOrder(oid, req.cookies.userid)
+  var uid = useridFromToken(req, res);
+  return model.getOrder(oid, uid)
     .then(function (order) {
       if (order) {
         console.log(order)
